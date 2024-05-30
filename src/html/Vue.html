@@ -1,19 +1,55 @@
-<div>
+<nav class="navbar navbar-expand-lg bg-dark"  data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"><img src="../assets/Logo.svg" alt="Logo"></a>
+    <div class="container-fluid">
+      <a class="navbar-item" href="#"><img src="../assets/Greeting.svg" alt="Logo"></a>
+    </div>
+  </div>
+</nav>
 
-    <img src="../assets/Logo.png" alt="Logo">
-    <table>
-      <thead>
-        <tr>
-          <th v-for="(value, key) in csvData[0]" :key="key">{{ key }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row, index) in csvData.slice(1)" :key="index">
-          <td v-for:="(value, key) in row" :key="key">{{ value }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div> {{minvalue}}</div>
+<div  class="container" style="margin-top:15px">
+  <div class="row">
+    <div class="col-3">
+        <!-- TODO : START COMPONENT HERE -->
+        <ul><button class="btn btn-outline-primary" style="width:100%">Toutes les stations</button></ul>
+        <ul><button class="btn btn-outline-primary" style="width:100%">Montreal</button></ul>
+        <ul><button class="btn btn-primary disabled" style="width:100%">Alterta</button>
+            <ul><button class="btn btn-outline-secondary" style="width:100%;margin-top:0.5rem;">Calgary</button></ul>
+            <ul><button class="btn btn-secondary disabled" style="width:100%;margin-top:0.5rem;">Edmonton</button></ul>
+        </ul>
+        <ul><button class="btn btn-outline-primary" style="width:100%">British Colombia</button></ul>
+        <ul><button class="btn btn-outline-primary" style="width:100%">Saskatchewan</button></ul>
+        <!-- TODO STOP COMPONENT HERE -->
+      </div>
+      <div class="col-9">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Data</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Statitic (TBD)</a>
+          </li>
+        </ul>
+        <!-- TODO : START COMPONENT (2x) HERE -->
+          <div class="table-responsive">
+              <table  class="table table-responsive">
+                <thead>
+                  <tr>
+                    <th v-for="(value, key) in csvData[0]" :key="key">{{ key }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(row, index) in csvData.slice(1)" :key="index">
+                    <td v-for:="(value, key) in row" :key="key">{{ value }}</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+          <!-- TODO STOP COMPONENT HERE -->
+    </div>
+  </div>
 </div>
 
+<div class="footer">
+  <div> {{minvalue}}</div>
+</div>

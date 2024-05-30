@@ -5,7 +5,9 @@ export default {
   data() {
     return {
       csvData: [],
-      minvalue :"Hello",
+      greetingMsg : "Bonjour ! ",
+      greetingSubMsg : "GTI525 - Groupe",
+      footerValue :"Hello",
     };
   },
   mounted() {
