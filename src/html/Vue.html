@@ -1,19 +1,31 @@
 <div>
+  <span>
+    Plage de dates: <br>
+    <label>De: </label> 
+    <select id="anneeDebut" v-on:change="plageDatesOnChange();">
+      <option v-for="(year) in years">{{year}}</option>
+    </select>
+    <select id="moisDebut" v-on:change="plageDatesOnChange();">
+      <option v-for="(name) in monthName">{{name}}</option>
+    </select>
+    <br>
+    <label>À: </label> 
+    <select id="anneeFin" v-on:change="plageDatesOnChange();">
+      <option v-for="(year) in years">{{year}}</option>
+    </select>
+    <select id="moisFin" v-on:change="plageDatesOnChange();">
+      <option v-for="(name) in monthName">{{name}}</option>
+    </select>
+    <br>
+    <button id="toutesDonnees" v-on:click="toutesDonneesOnClick();">Tout les données</button>
+    <br>
 
-    <img src="../assets/Logo.png" alt="Logo">
-    <table>
-      <thead>
-        <tr>
-          <th v-for="(value, key) in csvData[0]" :key="key">{{ key }}</th>
+    <div>
+      <table>
+        <tr v-for="(station) in stnData" :key="station">
+          <td v-for="(v, k) in station" :key="k">{{v}}</td>
         </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row, index) in csvData.slice(1)" :key="index">
-          <td v-for:="(value, key) in row" :key="key">{{ value }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div> {{minvalue}}</div>
+      </table>
+    </div>
+  </span>
 </div>
-
