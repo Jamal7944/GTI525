@@ -22,6 +22,9 @@
 
     <div>
       <table>
+        <tr >
+          <td v-for="(header) in vueDonnees_TableHeader" :key="header">{{header}}</td>
+        </tr>
         <tr v-for="(station) in stnData" :key="station">
           <td v-for="(v, k) in station" :key="k">{{v}}</td>
         </tr>
