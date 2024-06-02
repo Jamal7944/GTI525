@@ -6,7 +6,7 @@
       <option v-for="(year) in years">{{year}}</option>
     </select>
     <select id="moisDebut" v-on:change="plageDatesOnChange();">
-      <option v-for="(name) in monthName">{{name}}</option>
+      <option v-for="(name) in monthNames">{{name}}</option>
     </select>
     <br>
     <label>À: </label> 
@@ -14,18 +14,22 @@
       <option v-for="(year) in years">{{year}}</option>
     </select>
     <select id="moisFin" v-on:change="plageDatesOnChange();">
-      <option v-for="(name) in monthName">{{name}}</option>
+      <option v-for="(name) in monthNames">{{name}}</option>
     </select>
     <br>
     <button id="toutesDonnees" v-on:click="toutesDonneesOnClick();">Tout les données</button>
     <br>
+    <label>Station ID: </label>
+    <select id="stationSelecteur" v-on:change="stationSelectorChange();">
+      <option v-for="(id) in stationIds">{{id}}</option>
+    </select>
 
-    <div>
-      <table>
-        <tr >
-          <td v-for="(header) in vueDonnees_TableHeader" :key="header">{{header}}</td>
+    <div id="T4-1_vueDonnes">
+      <table :key="stationData">
+        <tr>
+          <td v-for="(header) in stationDataHeader" :key="header">{{header}}</td>
         </tr>
-        <tr v-for="(station) in stnData" :key="station">
+        <tr v-for="(station) in stationData" :key="station">
           <td v-for="(v, k) in station" :key="k">{{v}}</td>
         </tr>
       </table>

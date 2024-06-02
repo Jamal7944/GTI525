@@ -1,26 +1,30 @@
-import Papa from 'papaparse'; // Importez Papaparse
-//import { StationData } from './stationData';
-import { vueDonnees } from './vueDonnees';
+
+//import { vueDonnees } from './vueDonnees';
+import { StationData } from './Stations/stationData';
+import { StationSnapshotView } from './Stations/stationSnapshotView';
+import { StationRegistery } from './Stations/stationRegistery';
 
 export default {
   name: "App",
   data() {
     return {
-      csvData: [],
-      stnData: [],
-      stats: [],
+      csvData: [], 
+      stationDataHeader: [], 
+      stationData: [],
+      stationGlobalStats: [],
+      stationMontlyStats: [],
+      stationIds: [],
       years: [],
-      monthName: ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre",
-        "Octobre", "Novembre", "Decembre"], 
-      vueDonnees_TableHeader: ["Années", "Mois", "Temps Moyen Max (C)", "Temps Moyen Min (C)", "Temps Moyen (C)", "Temps Max Enregistré (C)",
-    "Temps Min Enregistré (C)", "Pluie(mm)", "Neige(cm)", "Vitesse du vent(km/h)"],   
+      monthNames: [], 
+      stationRegistery: new StationRegistery(),
     };
-    
   },
 
   mounted() {
     this.loadCSV();
     this.loadYears();
+    this.monthNames = StationData.getMonths();
+    this.stationDataHeader = StationSnapshotView.getHeaders();
   },
 
   methods: {
@@ -33,26 +37,11 @@ export default {
 
     plageDatesOnChange() {
       this.stats = [];
-      let anneeDebutDD = document.getElementById("anneeFin");
-      let moisDebutDD = document.getElementById("moisFin");
-      let anneeFinDD = document.getElementById("anneeFin");
-      let moisFinDD = document.getElementById("moisFin");
-
-      for(let i = 1; i < this.stnData.length; i++) {
-        let condition = 
-          this.stnData[i].year >= anneeDebutDD.value &&
-          this.stnData[i].month >= moisDebutDD.value &&
-          this.stnData[i].year <= anneeFinDD.value &&
-          this.stnData[i].month <= moisFinDD.value;
-
-        if(condition) {
-          this.stats.push(this.stnData[i]);
-        }
-      }
-
-      for(let v in this.stats) {
-        console.log(v);
-      }
+      let anneeDebutDD = Number.parseInt(document.getElementById("anneeDebut").value);
+      let moisDebutDD = Number.parseInt(document.getElementById("moisDebut").selectedIndex + 1);
+      let anneeFinDD = Number.parseInt(document.getElementById("anneeFin").value);
+      let moisFinDD = Number.parseInt(document.getElementById("moisFin").selectedIndex + 1);
+      this.stationData = this.stationRegistery.getStationData().getDataInTimeFrame(anneeDebutDD, moisDebutDD, anneeFinDD, moisFinDD);
     },
 
     toutesDonneesOnClick() {
@@ -68,7 +57,21 @@ export default {
       this.plageDatesOnChange();
     },
 
+    stationSelectorChange() {
+      let stationSelectorDD = document.getElementById("stationSelecteur");
+      console.log(stationSelectorDD.value)
+      this.stationRegistery.loadStationData(stationSelectorDD.value);
+      this.plageDatesOnChange();
+
+      console.log(this.stationData);
+    },
+
     async loadCSV() {
+      await this.stationRegistery.loadStationInventory("Station Inventory EN");
+      this.stationIds = this.stationRegistery.getListOfStationID();
+      this.stationData = this.stationRegistery.selectedStationData;
+
+      /*
       try {
         const response = await fetch("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/118.csv");
         const csvText = await response.text();
@@ -76,14 +79,18 @@ export default {
       } catch (error) {
         console.error("Erreur lors du chargement du fichier CSV :", error);
       }
+      */
 
       // converti les données parsées en Objets (StationData);
-      this.stnData = [];
-      this.csvData.forEach((i) => {
+      //this.stnData = [];
+
+        /*
+        this.csvData.forEach((i) => {
         let fieldArray = [];
         for(let k in i) {
             fieldArray.push(i[k]);
         }
+
         let year = fieldArray[5];
         let month = fieldArray[6];
         let temp_Mean_Max =fieldArray[7];
@@ -94,14 +101,16 @@ export default {
         let rain= fieldArray[17];
         let snow= fieldArray[19];
         let wind_Speed_Max = fieldArray[27];
-
+        */
 
        /* console.log("Year: "+year+", Month: "+month+", Mean Max: "+temp_Mean_Max+", Mean Min: "+temp_Mean_Min +", Temp Mean: "+temp_Mean+
         ", Temp Max: "+ temp_Max+", Temp Min: "+temp_Min+", Rain: "+rain+", Snow: "+snow+", Wind: "+wind_Speed_Max);*/
-        let arrayData = [year, month, temp_Mean_Max, temp_Mean_Min, temp_Mean, temp_Max, temp_Min, rain, snow, wind_Speed_Max];
+        //let arrayData = [year, month, temp_Mean_Max, temp_Mean_Min, temp_Mean, temp_Max, temp_Min, rain, snow, wind_Speed_Max];
         
-        console.log(arrayData);
+        //console.log(arrayData);
         //console.log(fieldArray);
+
+        /*
         if(fieldArray.length != 29) {
           console.log(fieldArray);
         }
@@ -111,7 +120,9 @@ export default {
           this.stnData.push(data);
           //console.log("data: "+data);
         }
+        
       });
+      */
     },
   },
 };
