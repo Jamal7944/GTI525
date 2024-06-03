@@ -1,6 +1,11 @@
 import Papa from 'papaparse'; // Importez Papaparse
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import NavigationMenu from '@/components/NavigationMenu.vue'; // Assurez-vous de spécifier le bon chemin
 
 export default {
+  components: {
+    NavigationMenu 
+  },
   name: "App",
   data() {
     return {
