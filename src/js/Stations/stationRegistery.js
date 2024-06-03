@@ -53,6 +53,21 @@ export class StationRegistery {
 
     /**
      * 
+     * @returns Indique si la station sélectionnée a réussi à être chargée ou non.
+     */
+    hasValidSelectedStationData() {
+        return this.selectedStationData != null;
+    }
+
+    /**
+     * Obtient l'instance de StationData de la station sélectionnée. 
+     */
+    getSelectedStationData() {
+        return this.selectedStationData;
+    }
+
+    /**
+     * 
      * @returns Retourne la liste des identifiants de stations.
      */
     getListOfStationID() {
