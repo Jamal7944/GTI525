@@ -1,3 +1,7 @@
+
+/**
+ * Représente une entrée de l'inventaire de stations (Station Inventory EN.csv)
+ */
 export class StationInfo {
     name;
     province;
@@ -19,6 +23,10 @@ export class StationInfo {
     MLYFirstYear;
     MLYLastYear;
 
+    /**
+     * 
+     * @param {string[]} entries Liste de données représentant chaque valeur de la rangée. (19 valeurs attendues.)
+     */
     constructor(entries) {
         if(entries.length != 19) {
             console.log(entries);

@@ -1,3 +1,6 @@
+/**
+ * T4.1 - Représente les données pertinentes à afficher.
+ */
 export class StationSnapshotView {
     year;                       // TYPE: string
     month;                      // TYPE: string

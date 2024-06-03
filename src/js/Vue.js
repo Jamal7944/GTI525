@@ -4,6 +4,7 @@ import { StationData } from './Stations/stationData';
 import { StationSnapshotView } from './Stations/stationSnapshotView';
 import { StationRegistery } from './Stations/stationRegistery';
 
+
 export default {
   name: "App",
   data() {
@@ -42,6 +43,7 @@ export default {
       let anneeFinDD = Number.parseInt(document.getElementById("anneeFin").value);
       let moisFinDD = Number.parseInt(document.getElementById("moisFin").selectedIndex + 1);
       this.stationData = this.stationRegistery.getStationData().getDataInTimeFrame(anneeDebutDD, moisDebutDD, anneeFinDD, moisFinDD);
+      console.log("Station data: " + this.stationData);
     },
 
     toutesDonneesOnClick() {
@@ -69,7 +71,7 @@ export default {
     async loadCSV() {
       await this.stationRegistery.loadStationInventory("Station Inventory EN");
       this.stationIds = this.stationRegistery.getListOfStationID();
-      this.stationData = this.stationRegistery.selectedStationData;
+      this.toutesDonneesOnClick();
 
       /*
       try {

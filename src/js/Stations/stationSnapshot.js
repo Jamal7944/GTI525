@@ -1,3 +1,7 @@
+
+/**
+ * Class représentant un instantané d'une station.
+ */
 export class StationSnapshot {
     longitude;                  // TYPE: float
     latitude;                   // TYPE: float

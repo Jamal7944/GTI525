@@ -1,3 +1,7 @@
+
+/**
+ * [à supprimer, déplacé dans StationSnapshotView]
+ */
 export class vueDonnees {
 
     year;                      // TYPE: string

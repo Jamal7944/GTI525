@@ -2,12 +2,13 @@ import { StationSnapshot } from "./stationSnapshot";
 import { StationSnapshotView } from "./stationSnapshotView";
 
 export class StationData {
+
+    /** Liste des instantanés de la station. */
     snapshots = [];
-
-    constructor() {
-        // empty
-    }
-
+    
+    /**
+     *  Ajoute un instantané (StationSnapshot). 
+     */
     addSnapshot(snapshot) {
         if(!(snapshot instanceof StationSnapshot)) {
             throw new Error("snapshot was not instance of StationSnapshot.");
@@ -16,6 +17,9 @@ export class StationData {
         this.snapshots.push(snapshot);
     }
 
+    /** 
+     * Sélectionne les instantanés (StationSnapshot) selon la période sélectionnée. 
+     */
     getSnapshots(fromYear, fromMonth, toYear, toMonth) {
         if(typeof fromYear != "number" || typeof fromMonth != "number" || typeof toYear != "number" || typeof toMonth != "number") {
             throw new Error("parameters were of the wrong type!");
@@ -65,18 +69,10 @@ export class StationData {
         return processedView;
     }
 
-    /*
-    getGlobalMaxMeanTemp(selectedSnaps) {
 
-    }
-
-    getGlobalDataStats(fromYear, fromMonth, toYear, toMonth) {
-        let selectedSnaps = this.getSnapshots(fromYear, fromMonth, toYear, toMonth);
-        
-    }
-
-    */
-
+    /** 
+     * Obtient la liste des mois. 
+     */
     static getMonths() {
         return [
             "Janvier", 

@@ -1,3 +1,6 @@
+/**
+ * T5.1 - En développement.
+ */
 export class StationGlobalStats {
     entryName;     // string
     maxValue;      // float

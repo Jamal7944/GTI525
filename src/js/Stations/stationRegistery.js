@@ -1,51 +1,38 @@
-import Papa from 'papaparse'; // Importez Papaparse
+//import Papa from 'papaparse'; // Importez Papaparse
 import { StationInfo } from './stationInfo';
 import { StationData } from './stationData';
 import { StationSnapshot } from './stationSnapshot';
+import { CsvParser } from '../Parser/parser';
 
+/**
+ * Classe établissant un inventaire des stations. 
+ */
 export class StationRegistery {
+    /** Inventaire de StationInfo; la clée est le ID de la station. */
     stationMap = new Map(); 
-    selectedStationId;
-    selectedStationData;
 
-    constructor() {
-        // empty
-    }
+    /** Le ID de la station sélectionnée. */
+    selectedStationId;
+
+    /** L'instance StationData de la station sélectionnée. */
+    selectedStationData;
 
     /**
      * Charge en mémoire et construit les objets contenant les instantanés d'une station météo.
      * @param {string} stationID ID de la station météo désirée. 
      */
     async loadStationData(stationID) {
-        let csvData = [];
-
-        try {
-            const response = await fetch("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + stationID + ".csv");
-            const csvText = await response.text();
-            csvData = Papa.parse(csvText, { header: true }).data;
-        } catch (error) {
-            console.error("Erreur lors du chargement du fichier CSV :", error);
+        let snapshots = await CsvParser.loadAndParse("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + stationID + ".csv");
+        
+        this.selectedStationData = new StationData();
+        for(let i = 1; i < snapshots.length; i++) {
+            if(snapshots[i].length == 29) {
+                let snapshot = new StationSnapshot(snapshots[i]);
+                this.selectedStationData.addSnapshot(snapshot);
+            }
         }
 
-        try {
-            let stationData = new StationData();
-            csvData.forEach((i) => {
-                let fieldArray = [];
-                for(let k in i) {
-                    fieldArray.push(i[k]);
-                }
-                
-                if(fieldArray.length == 29) {
-                    let stationSnapshot = new StationSnapshot(fieldArray);
-                    stationData.addSnapshot(stationSnapshot);
-                }
-            });
-
-            this.selectedStationData = stationData 
-        }
-        catch(ex) {
-            console.log(ex); // normalement, si le code throw une exception, c'est qu'il ne trouve pas le fichier de la station.
-        }
+        this.selectedStationId = stationID;
     }
 
     /**
@@ -53,52 +40,21 @@ export class StationRegistery {
      * @param {string} filename Nom du fichier .csv contenant la liste des stations météo ainsi que leur ID de station.
      */
     async loadStationInventory(filename) {
-        let csvData = [];
-        try {
-            const response = await fetch("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + filename + ".csv");
-            const csvText = await response.text();
-            csvData = Papa.parse(csvText, { header: true }).data;
-        } catch (error) {
-            console.error("Erreur lors du chargement du fichier CSV :", error);
+        let data = await CsvParser.loadAndParse("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + filename + ".csv")
+        for(let i = 3; i < data.length; i++) {
+            let stationInfo = new StationInfo(data[i]);
+            this.stationMap.set(stationInfo.stationID, stationInfo);
         }
-
-        /*
-         * FIX.
-         * Il y a un problème avec le CSV où le parseur assume que la date de modification 
-         * de l'inventaire des stations c'est la clée du premier objet de chaque ligne. 
-         * Le reste des données est mis dans une donnée membre "__parsed_extra" qui est un tableau. 
-         */
-        let rowCount = 0;
-        csvData.forEach((row) => {
-            let fieldArray = [];
-            let firstKey;
-
-            firstKey = Object.keys(row)[0];   // obtient la clée de la première valeur de l'objet (qui est la date de modification du csv)
-            fieldArray.push(row[firstKey]);   // on doit push la première valeur avec la première clée qu'on a obtenu précédement
-            if(Object.keys(row).length > 1) { // s'il n'y a qu'une seule paire clée-valeur, alors on saute cet itération.
-                let secondKey = Object.keys(row)[1]; // on obtient la seconde clé, qui contient le reste de la rangée.
-                let rowOfValues = row[secondKey];    
-
-                for(let i = 0; i < rowOfValues.length; i++) {
-                    fieldArray.push(rowOfValues[i]);
-                }
-
-                if(rowCount != 0) { // pour éviter que les headers soient inclu comme station.
-                    let stationInfo = new StationInfo(fieldArray);
-                    this.stationMap.set(stationInfo.stationID, stationInfo);
-                }
-                
-                rowCount++
-            }
-        });
 
         // on sélectionne la première station par défaut.
         let firstStationKey = this.stationMap.keys().next();
-        this.selectedStationId = firstStationKey.value;
-        console.log(this.selectedStationId)
-        this.loadStationData(this.selectedStationId);
+        this.loadStationData(firstStationKey);
     }
 
+    /**
+     * 
+     * @returns Retourne la liste des identifiants de stations.
+     */
     getListOfStationID() {
         let ids = [];
         this.stationMap.forEach((v, k) => {
@@ -106,14 +62,5 @@ export class StationRegistery {
         })
         console.log(ids);
         return ids;
-    }
-
-    getStationData() {
-        return this.selectedStationData;
-    }
-
-    getStationDataFromName(name) {
-        let id = this.stationMap.get(name).stationID;
-        return this.stationData.get(id);
     }
 }
