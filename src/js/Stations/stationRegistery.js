@@ -22,7 +22,8 @@ export class StationRegistery {
      * @param {string} stationID ID de la station météo désirée. 
      */
     async loadStationData(stationID) {
-        let snapshots = await CsvParser.loadAndParse("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + stationID + ".csv");
+        let intStationID = Number.parseInt(stationID);
+        let snapshots = await CsvParser.loadAndParse("./Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + intStationID + ".csv");
         
         this.selectedStationData = new StationData();
         for(let i = 1; i < snapshots.length; i++) {
@@ -40,7 +41,7 @@ export class StationRegistery {
      * @param {string} filename Nom du fichier .csv contenant la liste des stations météo ainsi que leur ID de station.
      */
     async loadStationInventory(filename) {
-        let data = await CsvParser.loadAndParse("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + filename + ".csv")
+        let data = await CsvParser.loadAndParse("./Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + filename + ".csv")
         for(let i = 3; i < data.length; i++) {
             let stationInfo = new StationInfo(data[i]);
             this.stationMap.set(stationInfo.stationID, stationInfo);
@@ -48,7 +49,7 @@ export class StationRegistery {
 
         // on sélectionne la première station par défaut.
         let firstStationKey = this.stationMap.keys().next();
-        this.loadStationData(firstStationKey);
+        this.loadStationData((await firstStationKey).value);
     }
 
     /**

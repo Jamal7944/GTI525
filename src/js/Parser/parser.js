@@ -5,6 +5,7 @@ export class CsvParser {
      * @returns Retourne un tableau de rangées d'objets.
      */
     static async loadAndParse(filename) {
+        console.log(filename);
         let data; 
         try { 
             const response = await fetch(filename);
@@ -32,7 +33,7 @@ export class CsvParser {
                 i++;
                 row.push(value);
                 if(data[i] != ',') {
-                    console.log(row);
+                    //console.log(row);
                     values.push(row);
                     row = [];
                 }

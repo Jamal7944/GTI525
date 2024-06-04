@@ -28,8 +28,10 @@ export class StationData {
         let selectedSnaps = [];
         for(let i = 0; i < this.snapshots.length; i++) {
             let yearMonth = this.snapshots[i].year * 100 + this.snapshots[i].month;
-            let fromYearMonth = fromYear * 100 + fromMonth; 
+            let fromYearMonth = fromYear * 100 + fromMonth;
             let toYearMonth = toYear * 100 + toMonth;
+
+            console.log("1:" + yearMonth + "\n2:" + fromYearMonth + "\n3:" + toYearMonth);
 
             if(yearMonth >= fromYearMonth && yearMonth <= toYearMonth) {
                 selectedSnaps.push(this.snapshots[i]);
@@ -49,6 +51,9 @@ export class StationData {
     getDataInTimeFrame(fromYear, fromMonth, toYear, toMonth) {
         let selectedSnaps = this.getSnapshots(fromYear, fromMonth, toYear, toMonth);
         let processedView = [];
+
+        console.log(selectedSnaps.length)
+
         for(let i = 0; i < selectedSnaps.length; i++) {
             let viewArr = [
                 selectedSnaps[i].year,
@@ -73,20 +78,5 @@ export class StationData {
     /** 
      * Obtient la liste des mois. 
      */
-    static getMonths() {
-        return [
-            "Janvier", 
-            "Fevrier", 
-            "Mars", 
-            "Avril", 
-            "Mai", 
-            "Juin", 
-            "Juillet", 
-            "Aout", 
-            "Septembre", 
-            "Octobre", 
-            "Novembre", 
-            "Decembre"
-        ];
-    }
+    
 }

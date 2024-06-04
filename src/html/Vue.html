@@ -24,15 +24,6 @@
       <option v-for="(id) in stationIds">{{id}}</option>
     </select>
 
-    <div id="T4-1_vueDonnes">
-      <table>
-        <tr>
-          <td v-for="(header) in stationDataHeader" :key="header">{{header}}</td>
-        </tr>
-        <tr v-for="(station) in stationData" :key="station">
-          <td v-for="(v, k) in station" :key="k">{{v}}</td>
-        </tr>
-      </table>
-    </div>
+    <div id="T4-1_vueDonnes" v-html="T4_1_vueDonnees_HTML"> </div>
   </span>
 </div>

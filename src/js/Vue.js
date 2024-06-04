@@ -1,52 +1,28 @@
 
 //import { vueDonnees } from './vueDonnees';
-import { StationData } from './Stations/stationData';
-import { StationSnapshotView } from './Stations/stationSnapshotView';
-import { StationRegistery } from './Stations/stationRegistery';
-
+//import { StationData } from './Stations/stationData';
+//import { StationSnapshotView } from './Stations/stationSnapshotView';
+//import { StationRegistery } from './Stations/stationRegistery';
+//import { StationSnapshot } from './Stations/stationSnapshot';
+import { Station } from './Stations/Station';
 
 export default {
   name: "App",
   data() {
     return {
-      csvData: [], 
-      stationDataHeader: [], 
-      stationData: [],
-      stationGlobalStats: [],
-      stationMontlyStats: [],
-      stationIds: [],
       years: [],
       monthNames: [], 
-      stationRegistery: new StationRegistery(),
+      T4_1_vueDonnees_HTML: "",
     };
   },
 
   mounted() {
-    this.loadCSV();
-    this.loadYears();
-    this.monthNames = StationData.getMonths();
-    this.stationDataHeader = StationSnapshotView.getHeaders();
+    this.load();
   },
 
   methods: {
-    loadYears() {
-      this.years = [];
-      for(let i = 1900; i < 2050; i++) {
-        this.years.push(i);
-      }
-    },
-
     plageDatesOnChange() {
-      this.stats = [];
-      let anneeDebutDD = Number.parseInt(document.getElementById("anneeDebut").value);
-      let moisDebutDD = Number.parseInt(document.getElementById("moisDebut").selectedIndex + 1);
-      let anneeFinDD = Number.parseInt(document.getElementById("anneeFin").value);
-      let moisFinDD = Number.parseInt(document.getElementById("moisFin").selectedIndex + 1);
-
-      if(this.stationRegistery.hasValidSelectedStationData()) {
-        this.stationData = this.stationRegistery.getSelectedStationData().getDataInTimeFrame(anneeDebutDD, moisDebutDD, anneeFinDD, moisFinDD);
-        console.log("Station data: " + this.stationData);
-      }
+      this.loadStationMetricsView();
     },
 
     toutesDonneesOnClick() {
@@ -62,15 +38,71 @@ export default {
     },
 
     stationSelectorChange() {
-      let stationSelectorDD = document.getElementById("stationSelecteur");
-      this.stationRegistery.loadStationData(stationSelectorDD.value);
+      let stationID = Number.parseInt(document.getElementById("stationSelecteur").value);
+      //this.stationRegistery.loadStationData(stationSelectorDD.value);
+      Station.loadStationMetrics(stationID);
       this.plageDatesOnChange();
     },
 
-    async loadCSV() {
-      await this.stationRegistery.loadStationInventory("Station Inventory EN");
-      this.stationIds = this.stationRegistery.getListOfStationID();
-      this.toutesDonneesOnClick();
+    loadYears() {
+      this.years = [];
+      for(let i = 1900; i < 2050; i++) {
+        this.years.push(i);
+      }
+    },
+
+    loadMonths() {
+      this.monthNames = Station.getMonths();
+    },
+    
+    async loadStationIds() {
+      let idList = [];
+      let attempts = 0;
+      const maxAttempts = 10;
+
+      while(idList.length == 0 && attempts < maxAttempts) {
+        idList = Station.getStationIdList();
+        await new Promise((r) => setTimeout(r, 100)); // ne posez pas de question, ça marche.
+        attempts++;
+      }
+      this.stationIds = idList;
+      console.log(this.stationIds);
+    },
+
+    async loadStationMetricsView() {
+      let anneeDebutDD = Number.parseInt(document.getElementById("anneeDebut").value);
+      let moisDebutDD = Number.parseInt(document.getElementById("moisDebut").selectedIndex + 1);
+      let anneeFinDD = Number.parseInt(document.getElementById("anneeFin").value);
+      let moisFinDD = Number.parseInt(document.getElementById("moisFin").selectedIndex + 1);
+      let fromDate = Station.getFormatedDate(anneeDebutDD, moisDebutDD);
+      let toDate = Station.getFormatedDate(anneeFinDD, moisFinDD);
+      let metricsView = [];
+      let attempts = 0;
+      const maxAttempts = 10;
+
+      let metricsHeaders = Station.getMetricsViewHeader();
+
+      while(metricsView.length == 0 && attempts < maxAttempts) {
+        metricsView = Station.selectMetricsView(fromDate, toDate);
+        await new Promise((r) => setTimeout(r, 250)); // ne posez pas de question, ça marche.
+        attempts++;
+      }
+
+      let html = Station.generateHTML(metricsHeaders, metricsView);
+      this.T4_1_vueDonnees_HTML = html;
+    },
+
+    async load() {
+      this.loadYears();
+      this.loadMonths();
+      Station.loadStationInventory();
+      await this.loadStationIds();
+
+      if(this.stationIds.length > 0) {
+        let stationID = Number.parseInt(this.stationIds[0]);
+        Station.loadStationMetrics(stationID);
+        this.loadStationMetricsView();
+      }
     },
   },
 };
