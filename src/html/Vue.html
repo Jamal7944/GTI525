@@ -10,52 +10,12 @@
 <div  class="container" style="margin-top:15px">
   <div class="row">
     <div class="col-3">
-        <!-- TODO : START COMPONENT HERE -->
-        <NavigationMenu />
-        <!-- TODO STOP COMPONENT HERE -->
-      </div>
-      <div class="col-9">
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Data</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Statistic (TBD)</a>
-          </li>
-        </ul>
-        <!-- TODO : START COMPONENT (2x) HERE -->
-        <div>
-          <span>
-            Plage de dates: <br>
-            <label>De: </label> 
-            <select id="anneeDebut" v-on:change="plageDatesOnChange();">
-              <option v-for="(year) in years">{{year}}</option>
-            </select>
-            <select id="moisDebut" v-on:change="plageDatesOnChange();">
-              <option v-for="(name) in monthNames">{{name}}</option>
-            </select>
-            <br>
-            <label>À: </label> 
-            <select id="anneeFin" v-on:change="plageDatesOnChange();">
-              <option v-for="(year) in years">{{year}}</option>
-            </select>
-            <select id="moisFin" v-on:change="plageDatesOnChange();">
-              <option v-for="(name) in monthNames">{{name}}</option>
-            </select>
-            <br>
-            <button id="toutesDonnees" v-on:click="toutesDonneesOnClick();">Tout les données</button>
-            <br>
-            <label>Station ID: </label>
-            <select id="stationSelecteur" v-on:change="stationSelectorChange();">
-              <option v-for="(id) in stationIds">{{id}}</option>
-            </select>
-        
-            <div id="T4-1_vueDonnes" v-html="T4_1_vueDonnees_HTML"> </div>
-          </span>
-        </div>
-          
-          <!-- TODO STOP COMPONENT HERE -->
+        <NavigationMenu /> 
     </div>
+
+    <DataStatMenu/>
+
+
   </div>
 </div>
 

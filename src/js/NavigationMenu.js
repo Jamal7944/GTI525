@@ -1,5 +1,6 @@
 import Papa from 'papaparse'; // Importez Papaparse
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import DataStatMenu from './DataStatMenu';
 
 export default {
   name: "NavigationMenu",
@@ -20,15 +21,15 @@ export default {
         const csvText = await response.text();
         this.ListeStations = Papa.parse(this.removeFirstLines(csvText,3), { header: true }).data;
 
-      
-        this.ListeStations.forEach(station => {
-          const province = station.Province;
-          if (!this.ProvinceStations[province]) {
-            this.ProvinceStations[province] = [];
-          }
-          this.ProvinceStations[province].push(station);
-      });
+        this.ProvinceStations = {}; // Initialisation de ProvinceStations comme un objet vide
 
+        this.ListeStations.forEach(station => {
+            const province = station.Province;
+            if (!this.ProvinceStations[province]) {
+                this.ProvinceStations[province] = [];
+            }
+            this.ProvinceStations[province].push(station);
+        });
 
     } catch (error) {
         console.error("Erreur lors du chargement du fichier CSV :", error);
@@ -38,7 +39,12 @@ export default {
       const lines = text.split('\n');
       const remainingLines = lines.slice(numberOfLinesToRemove).join('\n');
       return remainingLines;
-    }
+    },
+    LoadDataStation(id){
+      console.log(id);
+      DataStatMenu.methods.stationSelectorChange(id)
+    },
 
-  },
+  }
+
 };
