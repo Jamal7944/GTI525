@@ -1,0 +1,15 @@
+  <!-- TODO : START COMPONENT HERE -->
+
+  <div>
+      <ul><button class="btn btn-outline-primary" style="width:100%">Toutes les stations</button></ul>
+
+  <div class="list-group" style="height: 400px; overflow-y: auto;">
+    <ul v-for="(station, index) in ListeStations" :key="index" class="list-group-item">
+      
+      <button @click="test(station)" class="btn btn-primary " style="width:100%">{{ station.Province }}</button>
+    </ul>
+  </div>
+  
+  </div>
+
+  
