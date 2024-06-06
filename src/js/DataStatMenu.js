@@ -1,4 +1,5 @@
 import { Station } from './Stations/Station';
+import {DateUtils} from './Utils/Date';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export default {
@@ -39,16 +40,10 @@ export default {
         this.plageDatesOnChange();
       },
   
-      loadYears() {
-        this.years = [];
-        for(let i = 1900; i < 2050; i++) {
-          this.years.push(i);
-        }
-      },
-  
-      loadMonths() {
-        this.monthNames = Station.getMonths();
-      },
+      loadDates() {
+        this.years = DateUtils.getYears(1900, 2050);
+        this.monthNames = DateUtils.getMonths();
+      }, 
       
       async loadStationIds() {
         let idList = [];
@@ -83,23 +78,25 @@ export default {
           attempts++;
         }
 
-
-  
         let html = Station.generateHTML(metricsHeaders, metricsView);
         this.T4_1_vueDonnees_HTML = html;
       },
   
       async load() {
-        this.loadYears();
-        this.loadMonths();
-        Station.loadStationInventory();
-        await this.loadStationIds();
+        Station.loadStationInventory().then(() => {
+          this.loadDates();
+          this.loadStationIds();
   
-        if(this.stationIds.length > 0) {
-          let stationID = Number.parseInt(this.stationIds[0]);
-          Station.loadStationMetrics(stationID);
-          this.loadStationMetricsView();
-        }
+          if(this.stationIds.length > 0) {
+            let stationID = Number.parseInt(this.stationIds[0]);
+            Station.loadStationMetrics(stationID);
+            this.loadStationMetricsView();
+          }
+        })
+
+        
+        
+        
       },
     },
   };
