@@ -1,6 +1,7 @@
 import { Station } from './Stations/Station';
 import {DateUtils} from './Utils/Date';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { TableUtils } from './Utils/Table';
 
 export default {
     name: "DataStatMenu",
@@ -30,14 +31,14 @@ export default {
         moisDebutDD.options[0].selected = true;
         anneeFinDD.options[anneeFinDD.options.length - 1].selected = true;
         moisFinDD.options[moisFinDD.options.length - 1].selected = true;
-        this.plageDatesOnChange();
+        this.loadStationMetricsView();
       },
   
       stationSelectorChange(id) {
         let stationID = Number.parseInt(id);
-        //this.stationRegistery.loadStationData(stationSelectorDD.value);
-        Station.loadStationMetrics(stationID);
-        this.plageDatesOnChange();
+        Station.loadStationMetrics(stationID, this, (context) => {
+          context.loadStationMetricsView();
+        });
       },
   
       loadDates() {
@@ -45,18 +46,9 @@ export default {
         this.monthNames = DateUtils.getMonths();
       }, 
       
-      async loadStationIds() {
-        let idList = [];
-        let attempts = 0;
-        const maxAttempts = 10;
-  
-        while(idList.length == 0 && attempts < maxAttempts) {
-          idList = Station.getStationIdList();
-          await new Promise((r) => setTimeout(r, 200)); // ne posez pas de question, ça marche.
-          attempts++;
-        }
+      loadStationIds() {
+        let idList = Station.getStationIdList();
         this.stationIds = idList;
-        console.log(this.stationIds);
       },
   
       async loadStationMetricsView() {
@@ -64,39 +56,29 @@ export default {
         let moisDebutDD = Number.parseInt(document.getElementById("moisDebut").selectedIndex + 1);
         let anneeFinDD = Number.parseInt(document.getElementById("anneeFin").value);
         let moisFinDD = Number.parseInt(document.getElementById("moisFin").selectedIndex + 1);
-        let fromDate = Station.getFormatedDate(anneeDebutDD, moisDebutDD);
-        let toDate = Station.getFormatedDate(anneeFinDD, moisFinDD);
-        let metricsView = [];
-        let attempts = 0;
-        const maxAttempts = 10;
+        let fromDate = DateUtils.getFormatedDate(anneeDebutDD, moisDebutDD);
+        let toDate = DateUtils.getFormatedDate(anneeFinDD, moisFinDD);
   
         let metricsHeaders = Station.getMetricsViewHeader();
-  
-        while(metricsView.length == 0 && attempts < maxAttempts) {
-          metricsView = Station.selectMetricsView(fromDate, toDate);
-          await new Promise((r) => setTimeout(r, 100)); // ne posez pas de question, ça marche.
-          attempts++;
-        }
+        let metricsView = Station.selectMetricsView(fromDate, toDate);
+        let html = TableUtils.generateHTML(metricsHeaders, metricsView);
 
-        let html = Station.generateHTML(metricsHeaders, metricsView);
+        this.T4_1_vueDonnees_HTML = html;
         this.T4_1_vueDonnees_HTML = html;
       },
   
-      async load() {
-        Station.loadStationInventory().then(() => {
-          this.loadDates();
-          this.loadStationIds();
+      load() {
+        Station.loadStationInventory(this, (context) => {
+          context.loadDates();
+          context.loadStationIds();
   
-          if(this.stationIds.length > 0) {
-            let stationID = Number.parseInt(this.stationIds[0]);
-            Station.loadStationMetrics(stationID);
-            this.loadStationMetricsView();
+          if(context.stationIds.length > 0) {
+            let stationID = Number.parseInt(context.stationIds[0]);
+            Station.loadStationMetrics(stationID, context, (context) => {
+              context.loadStationMetricsView();
+            });
           }
-        })
-
-        
-        
-        
+        });
       },
     },
   };

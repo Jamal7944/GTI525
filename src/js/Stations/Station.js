@@ -1,4 +1,5 @@
 import { Assert } from "../Utils/Assert";
+import { DateUtils } from "../Utils/Date";
 import { ObjParser } from "../Utils/Parser";
 
 export class Station {
@@ -9,24 +10,27 @@ export class Station {
     /**
      * Charges l'inventaire de station météo.
      */
-    static async loadStationInventory() {
+    static loadStationInventory(context, thenCallback) {
         let filename = "./Laboratoire_1_-_Enonces-20240516/Lab1_CSV/Station Inventory EN.csv"
-        let result = await ObjParser.csvToObj(filename, 2);
-        this.stationInventory = result;
-
-        return true;
+        ObjParser.csvToObj(filename, 2).then((result) => {
+            this.stationInventory = result;
+            thenCallback(context);
+        });
     }
 
     /**
      * Charges les métriques d'une station météo.
      * @param {number} stationID L'identifiant unique de la station météo. 
      */
-    static async loadStationMetrics(stationID) {
+    static async loadStationMetrics(stationID, context, thenCallback) {
         Assert.type(stationID, "number", "stationID");
 
         let filename = "./Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + stationID + ".csv";
-        let result = await ObjParser.csvToObj(filename, 0);
-        this.stationMetrics = result; 
+        ObjParser.csvToObj(filename, 0).then((result) => {
+            if(result != undefined) 
+                this.stationMetrics = result;
+            thenCallback(context);
+        });
     }
 
     /**
@@ -55,7 +59,7 @@ export class Station {
             let year = Number.parseInt(element["Year"]);
             let month = Number.parseInt(element["Month"]);
 
-            let elementDate = this.getFormatedDate(year, month);
+            let elementDate = DateUtils.getFormatedDate(year, month);
             if(elementDate >= fromDate && elementDate <= toDate) {
                 let view = [];
                 view["Year"] = element["Year"];
