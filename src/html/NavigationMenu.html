@@ -6,18 +6,10 @@
   <div class="list-group" style="height: 400px; overflow-y: auto;">
     <ul v-for="(station, index) in ListeStations" :key="index" class="list-group-item">
       
-      <button class="btn btn-primary " style="width:100%">{{ station.Province }}</button>
+      <button @click="test(station)" class="btn btn-primary " style="width:100%">{{ station.Province }}</button>
     </ul>
   </div>
   
   </div>
 
   
-  <!-- <ul></ul>
-  <ul><button class="btn btn-primary disabled" style="width:100%">Alterta</button>
-      <ul><button class="btn btn-outline-secondary" style="width:100%;margin-top:0.5rem;">Calgary</button></ul>
-      <ul><button class="btn btn-secondary disabled" style="width:100%;margin-top:0.5rem;">Edmonton</button></ul>
-  </ul>
-  <ul><button class="btn btn-outline-primary" style="width:100%">British Colombia</button></ul>
-  <ul><button class="btn btn-outline-primary" style="width:100%">Saskatchewan</button></ul> -->
-  <!-- TODO STOP COMPONENT HERE -->
