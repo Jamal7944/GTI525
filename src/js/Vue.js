@@ -1,6 +1,8 @@
 import Papa from 'papaparse'; // Importez Papaparse
+import { Station } from './Stations/Station';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import NavigationMenu from '@/components/NavigationMenu.vue'; // Assurez-vous de spécifier le bon chemin
+import NavigationMenu from '@/components/NavigationMenu.vue'; 
+
 
 export default {
   components: {
@@ -9,24 +11,98 @@ export default {
   name: "App",
   data() {
     return {
-      csvData: [],
-      greetingMsg : "Bonjour ! ",
-      greetingSubMsg : "GTI525 - Groupe",
-      footerValue :"Hello",
+      years: [],
+      monthNames: [], 
+      T4_1_vueDonnees_HTML: "",
     };
   },
+
   mounted() {
-    this.loadCSV();
+    this.load();
   },
+
   methods: {
-    async loadCSV() {
-      try {
-         
-        const response = await fetch("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/118.csv");
-        const csvText = await response.text();
-        this.csvData = Papa.parse(csvText, { header: true }).data;
-      } catch (error) {
-        console.error("Erreur lors du chargement du fichier CSV :", error);
+    plageDatesOnChange() {
+      this.loadStationMetricsView();
+    },
+
+    toutesDonneesOnClick() {
+      let anneeDebutDD = document.getElementById("anneeFin");
+      let moisDebutDD = document.getElementById("moisFin");
+      let anneeFinDD = document.getElementById("anneeFin");
+      let moisFinDD = document.getElementById("moisFin");
+      anneeDebutDD.options[0].selected = true;
+      moisDebutDD.options[0].selected = true;
+      anneeFinDD.options[anneeFinDD.options.length - 1].selected = true;
+      moisFinDD.options[moisFinDD.options.length - 1].selected = true;
+      this.plageDatesOnChange();
+    },
+
+    stationSelectorChange() {
+      let stationID = Number.parseInt(document.getElementById("stationSelecteur").value);
+      //this.stationRegistery.loadStationData(stationSelectorDD.value);
+      Station.loadStationMetrics(stationID);
+      this.plageDatesOnChange();
+    },
+
+    loadYears() {
+      this.years = [];
+      for(let i = 1900; i < 2050; i++) {
+        this.years.push(i);
+      }
+    },
+
+    loadMonths() {
+      this.monthNames = Station.getMonths();
+    },
+    
+    async loadStationIds() {
+      let idList = [];
+      let attempts = 0;
+      const maxAttempts = 10;
+
+      while(idList.length == 0 && attempts < maxAttempts) {
+        idList = Station.getStationIdList();
+        await new Promise((r) => setTimeout(r, 100)); // ne posez pas de question, ça marche.
+        attempts++;
+      }
+      this.stationIds = idList;
+      console.log(this.stationIds);
+    },
+
+    async loadStationMetricsView() {
+      let anneeDebutDD = Number.parseInt(document.getElementById("anneeDebut").value);
+      let moisDebutDD = Number.parseInt(document.getElementById("moisDebut").selectedIndex + 1);
+      let anneeFinDD = Number.parseInt(document.getElementById("anneeFin").value);
+      let moisFinDD = Number.parseInt(document.getElementById("moisFin").selectedIndex + 1);
+      let fromDate = Station.getFormatedDate(anneeDebutDD, moisDebutDD);
+      let toDate = Station.getFormatedDate(anneeFinDD, moisFinDD);
+      let metricsView = [];
+      let attempts = 0;
+      const maxAttempts = 10;
+
+      let metricsHeaders = Station.getMetricsViewHeader();
+
+      while(metricsView.length == 0 && attempts < maxAttempts) {
+        metricsView = Station.selectMetricsView(fromDate, toDate);
+        await new Promise((r) => setTimeout(r, 250)); // ne posez pas de question, ça marche.
+        attempts++;
+      }
+
+      let html = Station.generateHTML(metricsHeaders, metricsView);
+      this.T4_1_vueDonnees_HTML = html;
+    },
+
+    async load() {
+      this.loadYears();
+      this.loadMonths();
+      Station.loadStationInventory();
+      await this.loadStationIds();
+
+      if(this.stationIds.length > 0) {
+        let stationID = Number.parseInt(this.stationIds[0]);
+        Station.loadStationMetrics(stationID);
+        this.loadStationMetricsView();
       }
     },
   },

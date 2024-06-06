@@ -20,24 +20,40 @@
             <a class="nav-link active" aria-current="page" href="#">Data</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Statitic (TBD)</a>
+            <a class="nav-link" href="#">Statistic (TBD)</a>
           </li>
         </ul>
         <!-- TODO : START COMPONENT (2x) HERE -->
-          <div class="table-responsive">
-              <table  class="table table-responsive">
-                <thead>
-                  <tr>
-                    <th v-for="(value, key) in csvData[0]" :key="key">{{ key }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(row, index) in csvData.slice(1)" :key="index">
-                    <td v-for:="(value, key) in row" :key="key">{{ value }}</td>
-                  </tr>
-                </tbody>
-              </table>
-          </div>
+        <div>
+          <span>
+            Plage de dates: <br>
+            <label>De: </label> 
+            <select id="anneeDebut" v-on:change="plageDatesOnChange();">
+              <option v-for="(year) in years">{{year}}</option>
+            </select>
+            <select id="moisDebut" v-on:change="plageDatesOnChange();">
+              <option v-for="(name) in monthNames">{{name}}</option>
+            </select>
+            <br>
+            <label>À: </label> 
+            <select id="anneeFin" v-on:change="plageDatesOnChange();">
+              <option v-for="(year) in years">{{year}}</option>
+            </select>
+            <select id="moisFin" v-on:change="plageDatesOnChange();">
+              <option v-for="(name) in monthNames">{{name}}</option>
+            </select>
+            <br>
+            <button id="toutesDonnees" v-on:click="toutesDonneesOnClick();">Tout les données</button>
+            <br>
+            <label>Station ID: </label>
+            <select id="stationSelecteur" v-on:change="stationSelectorChange();">
+              <option v-for="(id) in stationIds">{{id}}</option>
+            </select>
+        
+            <div id="T4-1_vueDonnes" v-html="T4_1_vueDonnees_HTML"> </div>
+          </span>
+        </div>
+          
           <!-- TODO STOP COMPONENT HERE -->
     </div>
   </div>
