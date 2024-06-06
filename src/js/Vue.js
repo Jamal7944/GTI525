@@ -1,4 +1,3 @@
-import Papa from 'papaparse'; // Importez Papaparse
 import { Station } from './Stations/Station';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import NavigationMenu from '@/components/NavigationMenu.vue'; 
