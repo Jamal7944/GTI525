@@ -91,6 +91,7 @@ export class Station {
         })
 
         console.log("end");
+        console.log(obj);
         return obj;
     }
 
