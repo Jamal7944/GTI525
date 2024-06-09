@@ -10,6 +10,7 @@ export default {
         years: [],
         monthNames: [], 
         T4_1_vueDonnees_HTML: "",
+        T5_1_statsGlob_HTML: "",
       };
     },
   
@@ -19,7 +20,7 @@ export default {
   
     methods: {
       plageDatesOnChange() {
-        this.loadStationMetricsView();
+        this.loadStationData();
       },
   
       toutesDonneesOnClick() {
@@ -31,13 +32,14 @@ export default {
         moisDebutDD.options[0].selected = true;
         anneeFinDD.options[anneeFinDD.options.length - 1].selected = true;
         moisFinDD.options[moisFinDD.options.length - 1].selected = true;
-        this.loadStationMetricsView();
+
+        this.loadStationData();
       },
   
       stationSelectorChange(id) {
         let stationID = Number.parseInt(id);
         Station.loadStationMetrics(stationID, this, (context) => {
-          context.loadStationMetricsView();
+          context.loadStationData();
         });
       },
   
@@ -45,13 +47,8 @@ export default {
         this.years = DateUtils.getYears(1900, 2050);
         this.monthNames = DateUtils.getMonths();
       }, 
-      
-      loadStationIds() {
-        let idList = Station.getStationIdList();
-        this.stationIds = idList;
-      },
   
-      async loadStationMetricsView() {
+      loadStationData() {
         let anneeDebutDD = Number.parseInt(document.getElementById("anneeDebut").value);
         let moisDebutDD = Number.parseInt(document.getElementById("moisDebut").selectedIndex + 1);
         let anneeFinDD = Number.parseInt(document.getElementById("anneeFin").value);
@@ -61,23 +58,23 @@ export default {
   
         let metricsHeaders = Station.getMetricsViewHeader();
         let metricsView = Station.selectMetricsView(fromDate, toDate);
-        let html = TableUtils.generateHTML(metricsHeaders, metricsView);
+        let metricsHtml = TableUtils.generateHTML(metricsHeaders, metricsView);
+        this.T4_1_vueDonnees_HTML = metricsHtml;
 
-        this.T4_1_vueDonnees_HTML = html;
-        this.T4_1_vueDonnees_HTML = html;
+        let globalStatsHeaders = Station.getGlobalStatisticsHeader();
+        let globalStats = Station.getGlobalStatistics(fromDate, toDate);
+        let globalStatsHtml = TableUtils.generateHTML(globalStatsHeaders, globalStats);
+        this.T5_1_statsGlob_HTML = globalStatsHtml;
       },
-  
+
       load() {
         Station.loadStationInventory(this, (context) => {
           context.loadDates();
-          context.loadStationIds();
   
-          if(context.stationIds.length > 0) {
-            let stationID = Number.parseInt(context.stationIds[0]);
+          let stationID = Number.parseInt(Station.stationInventory[0]["Station ID"]);
             Station.loadStationMetrics(stationID, context, (context) => {
-              context.loadStationMetricsView();
+              context.loadStationData();
             });
-          }
         });
       },
     },
