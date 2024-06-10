@@ -51,4 +51,7 @@ export class DateUtils {
         }
 		return years;
 	}
+
+    /** Le nombre de mois par année. */
+    static monthNumer = 12;
 }

@@ -11,6 +11,7 @@ export default {
         monthNames: [], 
         T4_1_vueDonnees_HTML: "",
         T5_1_statsGlob_HTML: "",
+        T5_2_statsMensuel: "",
       };
     },
   
@@ -65,6 +66,15 @@ export default {
         let globalStats = Station.getGlobalStatistics(fromDate, toDate);
         let globalStatsHtml = TableUtils.generateHTML(globalStatsHeaders, globalStats);
         this.T5_1_statsGlob_HTML = globalStatsHtml;
+
+        let monthlyStatsHeaders = Station.getMonthlyStatisticsHeader();
+        let monthlyStats = Station.getMonthlyStatistics(fromDate, toDate);
+        let months = DateUtils.getMonths();
+        let totalMonthlyHTML = "";
+        for(let i = 0; i < DateUtils.monthNumer; i++) {
+          totalMonthlyHTML += TableUtils.generateHTMLWithTitle(months[i], monthlyStatsHeaders, monthlyStats[i]);
+        }
+        this.T5_2_statsMensuel = totalMonthlyHTML;
       },
 
       load() {
