@@ -11,16 +11,16 @@ module.exports = {
     ]
   },
   devServer: {
-    proxy: {
-      '/src/js/bootstrap.bundle.min.js': {
-        target: 'http://localhost:8080', // Changer l'URL du serveur si nécessaire
-        pathRewrite: {'^/src/js': ''}, // Supprimer la partie du chemin
-        changeOrigin: true,
-        secure: false,
-        onProxyRes: function(proxyRes, req, res) {
-          proxyRes.headers['content-type'] = 'text/javascript'; // Changer le type MIME
-        }
-      }
-    }
+    // proxy: {
+    //   '/src/js/bootstrap.bundle.min.js': {
+    //     target: 'http://localhost:8080', // Changer l'URL du serveur si nécessaire
+    //     pathRewrite: {'^/src/js': ''}, // Supprimer la partie du chemin
+    //     changeOrigin: true,
+    //     secure: false,
+    //     onProxyRes: function(proxyRes, req, res) {
+    //       proxyRes.headers['content-type'] = 'text/javascript'; // Changer le type MIME
+    //     }
+    //   }
+    // }
   }
 };

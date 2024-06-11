@@ -1,5 +1,4 @@
 import Papa from 'papaparse'; // Importez Papaparse
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import DataStatMenu from './DataStatMenu';
 
 export default {
@@ -43,6 +42,7 @@ export default {
     LoadDataStation(id){
       console.log(id);
       DataStatMenu.methods.stationSelectorChange(id)
+      document.getElementById("station_displayed_id").innerHTML = this.ListeStations[id].Name
     },
 
   }

@@ -1,6 +1,6 @@
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import NavigationMenu from '@/components/NavigationMenu.vue'; 
 import DataStatMenu from '@/components/DataStatMenu.vue';
+import 'bootstrap'
 
 
 export default {
@@ -15,10 +15,8 @@ export default {
   },
 
   mounted() {
-    
   },
 
   methods: {
-
   }
 };

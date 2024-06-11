@@ -1,12 +1,12 @@
   <!-- TODO : START COMPONENT HERE -->
 
-  <div>
+  <div id="navTab">
       <ul> <button class="btn btn-outline-primary" >Toutes les stations</button></ul>
 
-      <div class="accordion" id="accordionExample">
+      <div class="accordion" id="accordionExample" style="margin-bottom:0.2rem">
         <div v-for="(stations, province, index) in ProvinceStations" :key="province" class="accordion-item">
           <h2 class="accordion-header" id="heading{{ index }}">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" aria-expanded="true" :aria-controls="'collapse' + index">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" aria-expanded="false" :aria-controls="'collapse' + index">
               {{ province }}
             </button>
           </h2>

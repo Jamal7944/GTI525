@@ -26,7 +26,7 @@ export class Station {
      */
     static loadStationMetrics(stationID, context, thenCallback) {
         Assert.type(stationID, "number", "stationID");
-
+        
         let filename = "./Laboratoire_1_-_Enonces-20240516/Lab1_CSV/" + stationID + ".csv";
         ObjParser.csvToObj(filename, 0).then((result) => {
             if(result == undefined) 
