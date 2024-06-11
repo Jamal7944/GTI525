@@ -44,10 +44,12 @@ export default {
         this.datepicker.inputs[0].value = this.getToday();
         this.datepicker.inputs[1].value = this.getToday();
       },
+
+      selectDonneesOnClick() {
+        this.loadStationData();
+      },
   
       toutesDonneesOnClick() {
-        console.log(this.datepicker.inputs[0].value.split("/")[0]);
-        console.log(this.datepicker.inputs[0].value.split("/")[1]);
         this.datepicker.inputs[0].value = "1/1990"
         this.datepicker.inputs[1].value = this.getToday();
         this.loadStationData();
@@ -67,9 +69,9 @@ export default {
   
       loadStationData() {
         const rangepicker = document.getElementById('InputDatepick').rangepicker;
-        let anneeDebutDD = Number.parseInt(rangepicker.inputs[0].value.split("/")[2]);
+        let anneeDebutDD = Number.parseInt(rangepicker.inputs[0].value.split("/")[1]);
         let moisDebutDD = Number.parseInt(rangepicker.inputs[0].value.split("/")[0]);
-        let anneeFinDD = Number.parseInt(rangepicker.inputs[1].value.split("/")[2]);
+        let anneeFinDD = Number.parseInt(rangepicker.inputs[1].value.split("/")[1]);
         let moisFinDD = Number.parseInt(rangepicker.inputs[1].value.split("/")[0]);
         let fromDate = DateUtils.getFormatedDate(anneeDebutDD, moisDebutDD);
         let toDate = DateUtils.getFormatedDate(anneeFinDD, moisFinDD);

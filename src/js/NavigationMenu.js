@@ -42,7 +42,7 @@ export default {
     LoadDataStation(id){
       console.log(id);
       DataStatMenu.methods.stationSelectorChange(id)
-      // document.getElementById("station_displayed_id").innerHTML = this.ListeStations[id].Name
+      document.getElementById("station_displayed_id").innerHTML = this.ListeStations[id].Name
     },
 
   }
