@@ -1,42 +1,43 @@
 
 
 
-  <div class="col-9">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Data</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Statistic (TBD)</a>
-      </li>
-    </ul>
-    <!-- TODO : START COMPONENT (2x) HERE -->
-    <div>
-      <span>
-        Plage de dates: <br>
-        <label>De: </label> 
-        <select id="anneeDebut" v-on:change="plageDatesOnChange();">
-          <option v-for="(year) in years">{{year}}</option>
-        </select>
-        <select id="moisDebut" v-on:change="plageDatesOnChange();">
-          <option v-for="(name) in monthNames">{{name}}</option>
-        </select>
-        <br>
-        <label>À: </label> 
-        <select id="anneeFin" v-on:change="plageDatesOnChange();">
-          <option v-for="(year) in years">{{year}}</option>
-        </select>
-        <select id="moisFin" v-on:change="plageDatesOnChange();">
-          <option v-for="(name) in monthNames">{{name}}</option>
-        </select>
-        <br>
-        <button id="toutesDonnees" v-on:click="toutesDonneesOnClick();">Tout les données</button>
-        <br>        
-        <div id="T4-1_vueDonnees" v-html="T4_1_vueDonnees_HTML" hidden> </div>
-        <div id="T5-1_statsGlob" v-html="T5_1_statsGlob_HTML"> </div>
-        <div id="T5-2_statsMensuel" v-html="T5_2_statsMensuel"> </div>
-      </span>
-
-  </div>    
-      <!-- TODO STOP COMPONENT HERE -->
+<h2 style="text-align:left;" id="station_displayed_id"><i>Nom de la station ici</i></h2>
+<h4 style="text-align:left">Plage de dates:</h4>
+<div class="row" style="margin:0">
+  <div class="col-9" style="
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 0;
+    text-align: left;">
+    <div id="InputDatepick">
+      <span>De:  </span>
+      <input type="text" style="text-align:center" name="start">
+      <span>  À:  </span>
+      <input type="text" style="text-align:center" name="end">  
+    </div>
+  </div>
+  <div class="col-3">
+        <button class="btn btn-outline-primary" id="toutesDonnees" v-on:click="toutesDonneesOnClick();">Tout les données</button>
+  </div>
+</div>
+  <div id="dataTab">
+ 
+  <ul class="nav nav-tabs" id="dataTabs">
+    <li class="nav-item">
+      <button class="nav-link active" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="home" aria-selected="true">Data</button>
+      
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#statistic" type="button" role="tab" aria-controls="statistic" aria-selected="false">Statistic </button>
+    </li>
+  </ul>
+  <div class="tab-content" id="dataTabsContent" style="border-bottom:solid 1px #dee2e6;border-left:solid 1px #dee2e6;border-right:solid 1px #dee2e6; padding:1rem">
+    <div class="tab-pane fade show active" id="data" role="tabpanel" aria-labelledby="data-tab" style="height:56vh;overflow-y:scroll">
+      <div id="T4-1_vueDonnees" v-html="T4_1_vueDonnees_HTML"> </div>
+    </div>
+    <div class="tab-pane fade" id="statistic" role="tabpanel" aria-labelledby="statistic-tab" style="height:56vh;overflow-y:scroll">
+      <div id="T5-1_statsGlob" v-html="T5_1_statsGlob_HTML"> </div>
+      <div id="T5-2_statsMensuel" v-html="T5_2_statsMensuel"> </div>
+    </div>
+  </div>
 </div>
