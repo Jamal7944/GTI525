@@ -112,7 +112,6 @@ export class ObjParser {
         })
 
         */
-        console.log(this.csvToObj.name);
         return obj;
     }
 }

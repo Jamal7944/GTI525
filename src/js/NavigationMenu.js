@@ -15,11 +15,13 @@ export default {
   methods: {
     async loadStations(){
       try {
-         
         const response = await fetch("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/Station Inventory EN.csv");
         const csvText = await response.text();
-        this.ListeStations = Papa.parse(this.removeFirstLines(csvText,3), { header: true }).data;
-
+        const validIDs = ["118","1865","2205","3002","3328","3698","4337","4789","4932","5097","5251","5415","6207","6358","6633","6720"]
+        this.ListeStations = Papa.parse(this.removeFirstLines(csvText,3), { header: true }).data.filter(data => {
+          return validIDs.includes(data["Station ID"])
+      });
+       
         this.ProvinceStations = {}; // Initialisation de ProvinceStations comme un objet vide
 
         this.ListeStations.forEach(station => {
@@ -29,6 +31,7 @@ export default {
             }
             this.ProvinceStations[province].push(station);
         });
+
 
     } catch (error) {
         console.error("Erreur lors du chargement du fichier CSV :", error);
@@ -42,7 +45,7 @@ export default {
     LoadDataStation(id){
       console.log(id);
       DataStatMenu.methods.stationSelectorChange(id)
-      document.getElementById("station_displayed_id").innerHTML = this.ListeStations[id].Name
+      document.getElementById("station_displayed_id").innerHTML = this.ListeStations.find(objet => objet["Station ID"] === id).Name
     },
 
   }

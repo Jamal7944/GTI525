@@ -6,6 +6,8 @@ export class Station {
 
     static stationInventory = [];
     static stationMetrics = [];
+    static validIDs = ["118","1865","2205","3002","3328","3698","4337","4789","4932","5097","5251","5415","6207","6358","6633","6720"]
+
 
     /**
      * Charges l'inventaire de station météo.
@@ -13,7 +15,10 @@ export class Station {
     static loadStationInventory(context, thenCallback) {
         let filename = "./Laboratoire_1_-_Enonces-20240516/Lab1_CSV/Station Inventory EN.csv"
         ObjParser.csvToObj(filename, 2).then((result) => {
-            this.stationInventory = result;
+            this.stationInventory = result.filter(data => {
+                return this.validIDs.includes(data["Station ID"])
+            });
+
             if(result.length == 0) 
                 return;
             thenCallback(context, result.length != 0);
