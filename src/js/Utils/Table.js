@@ -8,7 +8,7 @@ export class TableUtils {
 	 */
 	static generateHTML(headers, content) {
         let html = "";
-        html += "<table>";
+        html += "<table class=\"table table-striped  table-hover\">";
         html += "<tr>"; 
         for(let i = 0; i < headers.length; i++) {
             html += "<th>" + headers[i] + "</th>";
@@ -34,7 +34,7 @@ export class TableUtils {
    static generateHTMLWithTitle(title, headers, content) {
        let html = "";
        html += "<h2>" + title + "</h2><br>";
-       html += "<table>";
+       html += "<table class=\"table table-striped  table-hover\">";
        html += "<tr>"; 
        for(let i = 0; i < headers.length; i++) {
            html += "<th>" + headers[i] + "</th>";
