@@ -32,26 +32,32 @@ export default {
         return temp[0] + "/" + temp[2]
       },
 
-      loadDatapicker(){
+      // loadDatapicker(){
         
-        const elem = document.getElementById('InputDatepick');
-        this.datepicker = new DateRangePicker(elem, {
-          buttonClass: 'btn',
-          defaultViewDate: this.getToday(),
-          pickLevel: 1,
-          format: "m/yyyy"
-        });
-        this.datepicker.inputs[0].value = this.getToday();
-        this.datepicker.inputs[1].value = this.getToday();
-      },
+      //   const elem = document.getElementById('InputDatepick');
+      //   this.datepicker = new DateRangePicker(elem, {
+      //     buttonClass: 'btn',
+      //     defaultViewDate: this.getToday(),
+      //     pickLevel: 1,
+      //     format: "m/yyyy"
+      //   });
+      //   this.datepicker.inputs[0].value = this.getToday();
+      //   this.datepicker.inputs[1].value = this.getToday();
+      // },
 
       selectDonneesOnClick() {
         this.loadStationData();
       },
   
       toutesDonneesOnClick() {
-        this.datepicker.inputs[0].value = "1/1990"
-        this.datepicker.inputs[1].value = this.getToday();
+        let anneeDebutDD = document.getElementById("anneeFin");
+        let moisDebutDD = document.getElementById("moisFin");
+        let anneeFinDD = document.getElementById("anneeFin");
+        let moisFinDD = document.getElementById("moisFin");
+        anneeDebutDD.options[0].selected = true;
+        moisDebutDD.options[0].selected = true;
+        anneeFinDD.options[anneeFinDD.options.length - 1].selected = true;
+        moisFinDD.options[moisFinDD.options.length - 1].selected = true;
         this.loadStationData();
       },
   
@@ -68,11 +74,10 @@ export default {
       }, 
   
       loadStationData() {
-        const rangepicker = document.getElementById('InputDatepick').rangepicker;
-        let anneeDebutDD = Number.parseInt(rangepicker.inputs[0].value.split("/")[1]);
-        let moisDebutDD = Number.parseInt(rangepicker.inputs[0].value.split("/")[0]);
-        let anneeFinDD = Number.parseInt(rangepicker.inputs[1].value.split("/")[1]);
-        let moisFinDD = Number.parseInt(rangepicker.inputs[1].value.split("/")[0]);
+        let anneeDebutDD = Number.parseInt(document.getElementById("anneeDebut").value);
+        let moisDebutDD = Number.parseInt(document.getElementById("moisDebut").selectedIndex + 1);
+        let anneeFinDD = Number.parseInt(document.getElementById("anneeFin").value);
+        let moisFinDD = Number.parseInt(document.getElementById("moisFin").selectedIndex + 1);
         let fromDate = DateUtils.getFormatedDate(anneeDebutDD, moisDebutDD);
         let toDate = DateUtils.getFormatedDate(anneeFinDD, moisFinDD);
   
@@ -99,7 +104,6 @@ export default {
       load() {
         Station.loadStationInventory(this, (context) => {
           context.loadDates();
-          context.loadDatapicker();
   
           let stationID = Number.parseInt(Station.stationInventory[0]["Station ID"]);
             Station.loadStationMetrics(stationID, context, (context) => {
