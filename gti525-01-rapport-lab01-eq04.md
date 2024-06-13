@@ -65,6 +65,8 @@ membres.
 R5: Notez qu'une brève introduction et conclusion est également demandée.
  -->
 
+<div style="page-break-after: always;"></div>
+
 ## Introduction
 <!-- R5: Notez qu'une brève introduction et conclusion est également demandée. -->
 Dans ce premier projet de laboratoire pour le cours GTI525, nous devrons mettre en œuvre les connaissances acquises durant le cours afin de créer une application web permettant de visualiser l'historique météorologique de plusieurs stations situées dans différentes provinces du Canada. Pour ce premier laboratoire, nous devons nous concentrer sur la création d'une application simple en _front-end_ uniquement, qui nous permettra de naviguer et de visualiser sous forme de tableau les informations météorologiques. Nous devrons utiliser JavaScript ainsi que HTML pour manipuler et afficher les informations.
@@ -89,7 +91,7 @@ Le rapport a été fait en coopération avec l'ensemble de l'équipe, avec Jean-
 <!-- R1: Décrivez l'architecture logicielle utilisée, ainsi que l'organisation et le rôle des différents éléments (classes, fonctions) de votre code JavaScript. -->
 Pour facilité le code, et le déploiement, nous avons choisi d'utilisé le cadriciel _[Vue.JS](https://vuejs.org/)_. Nous avons aussi utilisé la librairie _[Bootstrap (V.5.3.3)](https://getbootstrap.com/)_ afin d'avoir un visuelle plus beau et harmonieux ainsi que pour gérer les differents grandeur d'écran. Finalement afin d'importer les données de type CSV dans le JavaScript, nous avons utilisé la librairie (_Parser_) [PapaParse](https://github.com/mholt/PapaParse). L'utilisation de VueJS combinée avec Bootstrap nous a permis de gagner du temps sur le visuel de l'application ainsi que la mise en lien des actions et données entre le HTML et le Javascript. Nous avons d'ores et déjà mis en place un système de _component_ pour séparer les résponsabilité de chaque élements de l'application et instaurer une hierarchie entre les componsants.
 
-
+<div style="page-break-after: always;"></div>
 
 ### 1.1. Organisation
 
@@ -133,6 +135,7 @@ project
 │       │   ...
 │       │
 ```
+<div style="page-break-after: always;"></div>
 
 
 ## 2. Algorithme list des stations métérologiques
