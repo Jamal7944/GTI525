@@ -139,7 +139,7 @@ Pour le projet de session, vous devez utiliser un entrepôt Git (GitHub ou GitLa
 |------- | ------------------------------------ | ---------------- |
 | **T1** | **Application dorsale ("back-end")** |   **Total 15**   |
 | T1.1   | Backend utilisant Express qui accepte les requêtes, et fournit des réponses <br> aux requêtes au moyen de l'API fetch. Note: tous les modules importés et <br> exportés doivent être au format ES6 (et non CommonJS!) | 12 |
-| T1.2 Accès à l'application via l'URL servie par le serveur web 3
+| T1.2 | Accès à l'application via l'URL servie par le serveur web | 3 |
 | **T2** | **Informations météo pour une journée donnée passée** | **Total 20** |
 | T2.1 | Nouvelle section informations journalières historiques |  2 |
 | T2.2 | La sélection de la plage de dates fait partie uniquement des sections "données" et "statistiques" | 3 |
