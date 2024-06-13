@@ -182,19 +182,26 @@ export class Station {
             Assert.type(maxEntry, "string", "maxEntry");
             Assert.type(variable, "number", "variable");
             
-            let minVal = Number.parseFloat(element[minEntry]);
-            let maxVal = Number.parseFloat(element[maxEntry]);
             let curObj = globalStats[variable];
             let curMax = curObj["Valeur maximale"];
             let curMin = curObj["Valeur minimale"];
+            let minVal = Number.parseFloat(element[minEntry]);
+            let maxVal = Number.parseFloat(element[maxEntry]);
+            if(isNaN(minVal) || isNaN(maxVal)) {
+                return;
+            }
+
+            // algorithme pour trouver la moyenne de la donnée
+            let avgVal = (minVal + maxVal) / 2.0;
+            avgVal = avgVal.toFixed(2);
     
-            if(!isNaN(maxVal) && curMax < maxVal) {
-                curObj["Valeur maximale"] = maxVal;
+            if(curMax < avgVal) {
+                curObj["Valeur maximale"] = avgVal;
                 curObj["Année max"] = element["Year"];
                 curObj["Mois max"] = element["Month"];
             }
-            if(!isNaN(minVal) && curMin > minVal) {
-                curObj["Valeur minimale"] = minVal;
+            if(curMin > avgVal) {
+                curObj["Valeur minimale"] = avgVal;
                 curObj["Année min"] = element["Year"];
                 curObj["Mois min"] = element["Month"];
             }
@@ -214,6 +221,15 @@ export class Station {
             }
         });
         
+        globalStats.forEach((element) => {
+            if(element["Valeur maximale"] == -Infinity) {
+                element["Valeur maximale"] = "Non disponible";
+            }
+            if(element["Valeur minimale"] == Infinity) {
+                element["Valeur minimale"] = "Non disponible";
+            }
+        });
+
         return globalStats;
     }
 
@@ -305,13 +321,20 @@ export class Station {
             let curObj = slStat[variable];
             let curMax = curObj["Valeur maximale"];
             let curMin = curObj["Valeur minimale"];
-    
-            if(!isNaN(maxVal) && curMax < maxVal) {
-                curObj["Valeur maximale"] = maxVal;
+            if(isNaN(minVal) || isNaN(maxVal)) {
+                return;
+            }
+
+            // algorithme pour trouver la moyenne de la donnée
+            let avgVal = (minVal + maxVal) / 2.0;
+            avgVal = avgVal.toFixed(2);
+
+            if(curMax < avgVal) {
+                curObj["Valeur maximale"] = avgVal;
                 curObj["Année max"] = element["Year"];
             }
-            if(!isNaN(minVal) && curMin > minVal) {
-                curObj["Valeur minimale"] = minVal;
+            if(curMin > avgVal) {
+                curObj["Valeur minimale"] = avgVal;
                 curObj["Année min"] = element["Year"];
             }
         }
@@ -330,6 +353,17 @@ export class Station {
             }
         });
         
+        for(let i = 0; i < monthlyStats.length; i++) {
+            monthlyStats[i].forEach((element) => {
+                if(element["Valeur maximale"] == -Infinity) {
+                    element["Valeur maximale"] = "Non disponible";
+                }
+                if(element["Valeur minimale"] == Infinity) {
+                    element["Valeur minimale"] = "Non disponible";
+                }
+            });
+        }
+
         return monthlyStats;
     }
     

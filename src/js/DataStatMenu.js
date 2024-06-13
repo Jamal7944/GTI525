@@ -83,14 +83,21 @@ export default {
   
         let metricsHeaders = Station.getMetricsViewHeader();
         let metricsView = Station.selectMetricsView(fromDate, toDate);
-        let metricsHtml = TableUtils.generateHTML(metricsHeaders, metricsView);
+        let metricsHtml = "";
+        if(metricsView.length == 0) {
+          metricsHtml = TableUtils.generateNotAvailable();
+        }
+        else {
+          metricsHtml = TableUtils.generateHTML(metricsHeaders, metricsView);
+        } 
         this.T4_1_vueDonnees_HTML = metricsHtml;
 
         let globalStatsHeaders = Station.getGlobalStatisticsHeader();
         let globalStats = Station.getGlobalStatistics(fromDate, toDate);
-        let globalStatsHtml = TableUtils.generateHTML(globalStatsHeaders, globalStats);
+        let globalStatsHtml = "";
+        globalStatsHtml = TableUtils.generateHTML(globalStatsHeaders, globalStats);
         this.T5_1_statsGlob_HTML = globalStatsHtml;
-
+ 
         let monthlyStatsHeaders = Station.getMonthlyStatisticsHeader();
         let monthlyStats = Station.getMonthlyStatistics(fromDate, toDate);
         let months = DateUtils.getMonths();
