@@ -151,7 +151,16 @@ L'objet PronvinceStations est ensuite directement lié au html grâce à VueJS.
 
 ## 3. Algorithme statistique globales (et /mois)
 <!-- R3: Décrivez brièvement l'algorithme utilisé pour calculer les statistiques globales et par mois. -->
+Nous devions afficher le maximum et le minimum de 5 données: 
+- Température moyenne mensuelle
+- Température extrême
+- Quantité de pluie
+- Quantité de neige 
+- Vitesse du vent
 
+De ces 5 données, seules la température extrême et la température moyenne mensuelle avaient des données de jour et de nuit. Ainsi, nous avons eu à calculer la moyenne de la température de nuit et de jour, et utiliser cette moyenne pour trouver les valeurs maximales et minimales de la température moyenne mensuelle et la température extrême. 
+
+Le calcul est le suivant: `temperature_moyenne = (temperature_jour + temperature_nuit) / 2`
 
 ## Conclusion
 <!-- R5: Notez qu'une brève introduction et conclusion est également demandée. -->
