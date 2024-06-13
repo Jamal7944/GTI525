@@ -95,7 +95,7 @@ export default {
         let globalStatsHeaders = Station.getGlobalStatisticsHeader();
         let globalStats = Station.getGlobalStatistics(fromDate, toDate);
         let globalStatsHtml = "";
-        globalStatsHtml = TableUtils.generateHTML(globalStatsHeaders, globalStats);
+        globalStatsHtml = TableUtils.generateHTMLWithTitle("Statistiques globales", globalStatsHeaders, globalStats);
         this.T5_1_statsGlob_HTML = globalStatsHtml;
  
         let monthlyStatsHeaders = Station.getMonthlyStatisticsHeader();
