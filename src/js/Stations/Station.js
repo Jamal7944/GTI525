@@ -177,7 +177,7 @@ export class Station {
         * @param {any} globalStatsRef Référence d'un objet de statistique globale.
         * @param {string} variable Variable de la statistique globale.
         */
-        let setMinMaxValues = function(element, minEntry, maxEntry, variable) {
+        let setMinMaxValues = function(element, maxEntry, minEntry, variable) {
             Assert.type(minEntry, "string", "minEntry");
             Assert.type(maxEntry, "string", "maxEntry");
             Assert.type(variable, "number", "variable");
@@ -193,15 +193,14 @@ export class Station {
 
             // algorithme pour trouver la moyenne de la donnée
             let avgVal = (minVal + maxVal) / 2.0;
-            avgVal = avgVal.toFixed(2);
     
             if(curMax < avgVal) {
-                curObj["Valeur maximale"] = avgVal;
+                curObj["Valeur maximale"] = avgVal.toFixed(2);
                 curObj["Année max"] = element["Year"];
                 curObj["Mois max"] = element["Month"];
             }
             if(curMin > avgVal) {
-                curObj["Valeur minimale"] = avgVal;
+                curObj["Valeur minimale"] = avgVal.toFixed(2);
                 curObj["Année min"] = element["Year"];
                 curObj["Mois min"] = element["Month"];
             }
@@ -309,7 +308,7 @@ export class Station {
         * @param {any} globalStatsRef Référence d'un objet de statistique globale.
         * @param {string} variable Variable de la statistique globale.
         */
-        let setMinMaxValues = function(element, minEntry, maxEntry, variable) {
+        let setMinMaxValues = function(element, maxEntry, minEntry, variable) {
             Assert.type(minEntry, "string", "minEntry");
             Assert.type(maxEntry, "string", "maxEntry");
             Assert.type(variable, "number", "variable");
@@ -327,14 +326,13 @@ export class Station {
 
             // algorithme pour trouver la moyenne de la donnée
             let avgVal = (minVal + maxVal) / 2.0;
-            avgVal = avgVal.toFixed(2);
 
-            if(curMax < avgVal) {
-                curObj["Valeur maximale"] = avgVal;
+            if(curMax <= avgVal) {
+                curObj["Valeur maximale"] = avgVal.toFixed(2);
                 curObj["Année max"] = element["Year"];
             }
-            if(curMin > avgVal) {
-                curObj["Valeur minimale"] = avgVal;
+            if(curMin >= avgVal) {
+                curObj["Valeur minimale"] = avgVal.toFixed(2);
                 curObj["Année min"] = element["Year"];
             }
         }
