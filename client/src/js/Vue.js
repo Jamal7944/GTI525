@@ -1,6 +1,6 @@
 import NavigationMenu from '@/components/NavigationMenu.vue'; 
 import DataStatMenu from '@/components/DataStatMenu.vue';
-import api from '../Services/APIs';
+import api from '../Services/ApiUtils';
 import 'bootstrap'
 
 
