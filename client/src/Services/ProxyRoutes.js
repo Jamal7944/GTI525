@@ -1,5 +1,3 @@
-// proxyRoutes.js
-
 const proxyRoutes = {
     '/api': {
       target: 'http://localhost:8081/api',
@@ -15,7 +13,7 @@ const proxyRoutes = {
         '^/other': ''
       }
     },
-    // Ajoutez d'autres routes selon vos besoins
+    // Ajoutez d'autres routes ici
   };
   
 export default proxyRoutes;

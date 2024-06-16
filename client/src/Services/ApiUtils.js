@@ -5,7 +5,7 @@ async function fetchDataPOST() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ key: 'value' }) // Remplacez par les données que vous souhaitez envoyer
+        body: JSON.stringify({ key: 'value' }) 
       };
   
       const response = await fetch("/api", requestOptions);
