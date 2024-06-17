@@ -1,0 +1,128 @@
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 0px;
+  }
+
+  .container {
+    margin-top:15px;
+  }
+
+  .container > .row > .col-2 {
+    overflow-y:scroll;
+  }
+
+  /* Partie navigation */
+  .accordion-body > button {
+    width:100%;
+    margin-bottom:0.5rem;
+    }
+
+  .accordion-header      {
+    overflow: hidden;
+    width:100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  #accordionNavigation {
+    margin-bottom:0.2rem;
+  }
+
+  #navTab {
+    max-height:65vh;
+
+  }
+
+  /* Partie data/stats */
+
+  .dataTitle {
+    text-align:left;
+  }
+
+  #rowDatePicker {
+    margin:0;
+  }
+
+  #colDatePicker {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 0;
+    text-align: left;
+  }
+
+  #colDatePicker > .row {
+    text-align:center;
+  }
+  
+  #anneeDebut, #anneeFin {
+    margin-bottom:0.5rem;
+  }
+
+  #dataTab {
+    margin-top:0.5rem;
+    min-width: 1100px;
+  }
+
+  .tab-content {
+    border-bottom:solid 1px #dee2e6;
+    border-left:solid 1px #dee2e6;
+    border-right:solid 1px #dee2e6; 
+    padding:1rem;
+    min-width: 1100px;
+  }
+
+  /* JF : probleme avec le tableau des donnée qui n'avait pas
+          la bonne grosseur selon la grandeur de l'écran
+  */
+  @media only screen and (max-height: 1200px) {
+    .tab-pane {
+      max-height:40vh;
+      overflow-y:scroll;
+    }
+  }
+  @media only screen and (min-height: 1201px) {
+    .tab-pane {
+      max-height:50vh;
+      overflow-y:scroll;
+    }
+  }
+
+
+  /* Footer */
+
+  .container-fluid {
+    background:#212529;
+    color:white;
+  }
+
+
+  .footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .footer > .row > .col-6 {
+    margin:auto;
+  }
+
+  .footer > .row > .col-6 > p {
+    margin-bottom: 0.1rem;
+  }
+
+  /* Étant donner que nous avons seulement 2 div dans la rangé (row)
+     nous pouvons utilisé les selecteur de CSS pour definir
+     des parametres selon leurs positions
+  */
+.footer > .row > div:nth-child(odd) { text-align:left; }
+.footer > .row >div:nth-child(even) { text-align:right; }
+
+

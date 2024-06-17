@@ -1,5 +1,11 @@
 # gti525
 
+
+## Install VueJs
+```
+npm install -g @vue/cli
+```
+
 ## Project setup
 ```
 npm install
