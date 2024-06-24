@@ -1,4 +1,4 @@
-import { Assert } from "./Assert";
+import { Assert } from "./Assert.js";
 
 export class ObjParser {
 
