@@ -1,5 +1,6 @@
 import fs from "fs";
 import { Logger } from "./utility/Logger.js";
+import { Result } from "./utility/Result.js";
 
 export class StationMapping {
 	static #mapping = {};

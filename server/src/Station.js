@@ -17,6 +17,10 @@ export class Station {
 		};
 	}
 
+	static #getPastHourlyForecastURL(stationID, year, month, day) {
+		return `https://climate.weather.gc.ca/climate_data/bulk_data_e.html?format=csv&stationID=${stationID}&Year=${year}Month=${month}&Day=${day}&timeframe=1&submit=%20Download+Data`;
+	}
+
 	static getPastHourlyForecastHeader() {
 		return [
 			"Température réelle",
@@ -29,20 +33,27 @@ export class Station {
 		];
 	}
 
-	static async getPastHourlyForecast(stationID, year, month, day) {
-		let url = `https://climate.weather.gc.ca/climate_data/bulk_data_e.html?format=csv&stationID=${stationID}&Year=${year}Month=${month}&Day=${day}&timeframe=1&submit=%20Download+Data`;
+	static async getPastHourlyForecast(idList, year, month, day) {
 		let result = [];
-		fetch(url).then((response) => {
+
+		for(let id in idList) {
+			let url = this.#getPastHourlyForecastURL(id, year, month, day);
+			let response = await fetch(url)
+			
 			let text = response.text();
 			let csv = ObjParser.parse(text);
 			let obj = ObjParser.csvToObj(csv);
-
+	
 			for(let row in obj) {
 				let data = this.#getPastHourlyRelevantInfo(row);
 				result.push(data);
 			}
-		})
 
+			if(result.length > 0) {
+				break;
+			}
+		}
+		
 		return result;
 	}
 }
