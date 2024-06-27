@@ -9,7 +9,7 @@ const app = express();
 const port = 8081;
 
 app.use(express.json());
-app.use('/api', apiRoutes)
+//app.use('/api', apiRoutes)
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(cors());
