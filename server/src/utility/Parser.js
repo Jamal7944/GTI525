@@ -23,8 +23,7 @@ export class ObjParser {
 
 				i++;
 				row.push(value);
-				if (data[i] != ',') {
-					//console.log(row);
+				if (data[i] != ',' || data[i] == '\n' || data[i] == '\r') {
 					values.push(row);
 					row = [];
 				}
@@ -54,13 +53,14 @@ export class ObjParser {
 			return [];
 		}
 
-		if(data.length() == 0) {
-			log.warning("expected data to have rows (data.length() returned 0)");
+		if(data.length == 0) {
+			log.warning("expected data to have rows (data.length returned 0)");
 			return [];
 		}
 
 		let obj = [];
 		let headers = data[startsAt];
+		let rowsSkipped = [];
 
 		for (let i = startsAt + 1; i < data.length; i++) {
 			let objRow = [];
@@ -73,8 +73,16 @@ export class ObjParser {
 				obj.push(objRow);
 			}
 			else {
-				console.log("skipped '" + data[i] + "'.");
+				rowsSkipped.push(i);
+				//console.log("skipped '" + data[i] + "'.");
 			}
+		}
+
+		if(rowsSkipped.length > 0) {
+			log.warning("Skipped rows: " + rowsSkipped);
+			log.warning((rowsSkipped.length / (data.length - startsAt - 1)) * 100 + "% skipped.");
+			log.warning("These rows were skipped due to not having a value for all the columns defined by the header.");
+			log.newline();
 		}
 
 		return obj;

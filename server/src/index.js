@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
-import { Station } from './Station.js';
+import { StationPastHourlyForecast } from './StationPastHourlyForecast.js';
 import { StationMapping } from './StationMapping.js';
 
 const app = express();
@@ -27,36 +27,37 @@ app.post('/', (req, res) => {
 	res.json({ message: 'Exemple de données depuis une route API avec POST' });
 });
 
-app.get("/station/past-hourly-forecast", (req, res) => {
-	/* on s'attend à recevoir:
-	{
-		stationID: ...,
-		year: ...,
-		month: ...,
-		day: ...,
-	};
-	*/
-	let request = JSON.parse(req.body);
+app.post("/station/past-hourly-forecast", async (req, res) => {
+	// on s'attend à recevoir: { stationID: ..., year: ..., month: ..., day: ... };
+
+	let request = req.body;
 	let stationID = Number.parseInt(request.stationID);
 	let stationMapping = StationMapping.getFromID(stationID);
-	
-	if(stationMapping.success) {
-		let idList = stationMapping.result.stationIds;
-		Station.getPastHourlyForecast(idList, request.year, request.month, request.day).then((result) => {
-			res.json({
-				info: result,
-				header: Station.getPastHourlyForecastHeader()
-			});
+
+	if (stationMapping.success) {
+		let station_ids = stationMapping.result.station_ids;
+		let info = [];
+		for (let i = 0; i < station_ids.length; i++) {
+			if (info.length == 0) {
+				let result = await StationPastHourlyForecast.getPastHourlyForecast(station_ids[i], request.year, request.month, request.day);
+				info = result;
+			}
+		}
+
+		res.json({
+			info: info,
+			header: StationPastHourlyForecast.getPastHourlyForecastHeader()
 		});
-	} 
+	}
 	else {
 		res.json({
 			info: [],
-			header: [],
+			header: StationPastHourlyForecast.getPastHourlyForecastHeader(),
 		})
-	}	
+	}
 })
 
 app.listen(port, () => {
 	console.log(`Serveur en cours d'exécution sur le port ${port}`);
+	StationMapping.load();
 });
