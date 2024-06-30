@@ -1,4 +1,3 @@
-
 <template src="./html/Vue.html"></template>
 
 <script src="./js/Vue.js"></script>

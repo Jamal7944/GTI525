@@ -1,4 +1,3 @@
-
 <template src="../html/DataStatMenu.html"></template>
 
 <script src="../js/DataStatMenu.js"></script>
