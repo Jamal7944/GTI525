@@ -1,6 +1,7 @@
 import { Station } from './Stations/Station';
 import {DateUtils} from './Utils/Date';
 import { TableUtils } from './Utils/Table';
+import {ParagraphUtils} from './Utils/Paragraph';
 import {DateRangePicker } from 'vanillajs-datepicker';
 import 'vanillajs-datepicker/css/datepicker-bs5.css';
 
@@ -13,6 +14,7 @@ export default {
         T4_1_vueDonnees_HTML: "",
         T5_1_statsGlob_HTML: "",
         T5_2_statsMensuel: "",
+        T3_1_forecast:"",
         datepicker:DateRangePicker
       };
     },
@@ -30,6 +32,20 @@ export default {
         const today = new Date();
         const temp = today.toLocaleDateString('en-us').split("/");
         return temp[0] + "/" + temp[2]
+      },
+
+      hideMenu_OnClick(){
+        const titleElement = document.querySelector('h4.dataTitle');
+        const datePickerElement = document.querySelector('#rowDatePicker')
+        titleElement.style.display = 'none';
+        datePickerElement.style.display = 'none';
+      },
+
+      showMenu_OnClick(){
+        const titleElement = document.querySelector('h4.dataTitle');
+        const datePickerElement = document.querySelector('#rowDatePicker')
+        titleElement.style.display = '';
+        datePickerElement.style.display = '';
       },
 
       // loadDatapicker(){
@@ -106,6 +122,11 @@ export default {
           totalMonthlyHTML += TableUtils.generateHTMLWithTitle(months[i], monthlyStatsHeaders, monthlyStats[i]);
         }
         this.T5_2_statsMensuel = totalMonthlyHTML;
+
+        let forecastHeader = Station.getForecastViewHeader();
+        let forecastStats = Station.getForecastView();
+        
+        this.T3_1_forecast+=ParagraphUtils.generateParagraphWithTitle("Prévision",forecastHeader,forecastStats);
       },
 
       load() {

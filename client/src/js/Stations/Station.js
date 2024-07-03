@@ -108,6 +108,41 @@ export class Station {
 
     /**
      * 
+     * @returns Retourne les entêtes pour les prévisions.
+     */
+    static getForecastViewHeader() {
+        return [
+            "Nom de la station",
+            "Mis à jour le", 
+            "Veilles et avertissements météo",
+            "Conditions actuelles", 
+            "Prévisions pour les prochains jours"
+        ];
+    }
+
+    /**
+     * 
+     * @returns Retourne les informations du backend pour la prévision 
+     */
+    static getForecastView() {
+        
+        /*Currently testing front end with false info*/
+        /*Connection to backend */
+        
+        /*Value attribution*/
+        //var stationID="12345";
+        var nameStation=["Test Station"];
+        var lastUpdated=["12/25/2024"];
+        var alarm = ["Test Alarm"];
+        var currentConditions =["Test Conditions"];
+        var forecast = [["TestTitle","TestSummary"],["TestTitle2","TestSummary2"]];
+
+        var results=[[nameStation,lastUpdated,alarm,currentConditions,forecast]];
+        return results;
+    }
+
+    /**
+     * 
      * @returns Retourne un objet contenant les champs de statistiques globales à remplir.
      */
     static getGlobalStatsTemplate() {
