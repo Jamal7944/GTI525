@@ -36,5 +36,17 @@ export default function loadRoutes(app) {
 		}
 	});
 
+	/**
+	 * Route pour obtenir les prévisions des prochains jours.
+	 */
+	app.post("/station/forecast", async (req, res) => {
+		let request = req.body;
+		let stationID = Number.parseInt(request.stationID);
 	
+		if(stationID){
+			let result = await StationForecast.getForecast(stationID);
+			console.log(result);
+			res.json(result);
+		}
+	});
 }

@@ -3,13 +3,15 @@ import {DateUtils} from "./Utils/Date";
 import {TableUtils} from "./Utils/Table";
 import {DateRangePicker} from "vanillajs-datepicker";
 import PastHourlyForecast from "@/components/PastHourlyForecast.vue";
+import ForecastWeek from '@/components/ForecastWeek.vue';
 import "vanillajs-datepicker/css/datepicker-bs5.css";
 
 export default {
 	name: "DataStatMenu",
 
 	components: {
-		PastHourlyForecast
+		PastHourlyForecast,
+		ForecastWeek
 	},
 
 	data() {
@@ -36,6 +38,20 @@ export default {
 			const today = new Date();
 			const temp = today.toLocaleDateString("en-us").split("/");
 			return temp[0] + "/" + temp[2];
+		},
+
+		hideMenu_OnClick(){
+			const titleElement = document.querySelector('h4.dataTitle');
+			const datePickerElement = document.querySelector('#rowDatePicker')
+			titleElement.style.display = 'none';
+			datePickerElement.style.display = 'none';
+		},
+
+		showMenu_OnClick(){
+			const titleElement = document.querySelector('h4.dataTitle');
+			const datePickerElement = document.querySelector('#rowDatePicker')
+			titleElement.style.display = '';
+			datePickerElement.style.display = '';
 		},
 
 		// loadDatapicker(){
@@ -116,8 +132,8 @@ export default {
 		load() {
 			Station.loadStationInventory(this, (context) => {
 				context.loadDates();
-
 				let stationID = Number.parseInt(Station.stationInventory[0]["Station ID"]);
+				ForecastWeek.methods.getForecastView(stationID);
 				Station.loadStationMetrics(stationID, context, (context) => {
 					context.loadStationData();
 				});
