@@ -11,7 +11,4 @@ export default {
 			})
 		]
 	},
-	devServer: {
-		proxy: proxyRoutes
-	}
 };

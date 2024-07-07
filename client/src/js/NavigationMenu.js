@@ -1,5 +1,6 @@
 import Papa from "papaparse"; // Importez Papaparse
 import DataStatMenu from "./DataStatMenu";
+import PastHourlyForecast from "./PastHourlyForecast";
 
 export default {
 	name: "NavigationMenu",
@@ -43,6 +44,7 @@ export default {
 		},
 		LoadDataStation(id) {
 			console.log(id);
+			PastHourlyForecast.methods.changeID(id);
 			DataStatMenu.methods.stationSelectorChange(id);
 			document.getElementById("station_displayed_id").innerHTML = this.ListeStations.find((objet) => objet["Station ID"] === id).Name;
 		},

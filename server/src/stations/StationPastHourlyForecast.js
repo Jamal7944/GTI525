@@ -1,6 +1,6 @@
-import { Logger } from "./utility/Logger.js";
-import {ObjParser} from "./utility/Parser.js"
-import { Result } from "./utility/Result.js";
+import { Logger } from "../utility/Logger.js";
+import {ObjParser} from "../utility/Parser.js"
+import { Result } from "../utility/Result.js";
 
 export class StationPastHourlyForecast {
 	static #getPastHourlyRelevantInfo(objRow) {

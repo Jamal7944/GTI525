@@ -1,6 +1,6 @@
 import fs from "fs";
-import { Logger } from "./utility/Logger.js";
-import { Result } from "./utility/Result.js";
+import { Logger } from "../utility/Logger.js";
+import { Result } from "../utility/Result.js";
 
 /**
  * Classe liant un code d'aéroport à des codes de stationID ainsi qu'à un flux RSS.
