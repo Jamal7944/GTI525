@@ -1,4 +1,4 @@
-import { Assert } from "./Assert.js";
+import { Assert } from "./Assert";
 
 export class DateUtils {
 	/**
