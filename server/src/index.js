@@ -4,6 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { Station } from './Station.js';
 import { StationMapping } from './StationMapping.js';
+import { StationForecast } from './StationForecast.js';
 
 const app = express();
 const port = 8081;
@@ -27,34 +28,18 @@ app.post('/', (req, res) => {
 	res.json({ message: 'Exemple de données depuis une route API avec POST' });
 });
 
-app.get("/station/past-hourly-forecast", (req, res) => {
-	/* on s'attend à recevoir:
-	{
-		stationID: ...,
-		year: ...,
-		month: ...,
-		day: ...,
-	};
-	*/
-	let request = JSON.parse(req.body);
+app.post("/station/forecast", async (req, res) => {
+
+	let request = req.body;
 	let stationID = Number.parseInt(request.stationID);
-	let stationMapping = StationMapping.getFromID(stationID);
+
+	if(stationID){
+		let result = await StationForecast.getForecast(stationID);
+		console.log(result);
+		res.json(result);
+
+	}
 	
-	if(stationMapping.success) {
-		let idList = stationMapping.result.stationIds;
-		Station.getPastHourlyForecast(idList, request.year, request.month, request.day).then((result) => {
-			res.json({
-				info: result,
-				header: Station.getPastHourlyForecastHeader()
-			});
-		});
-	} 
-	else {
-		res.json({
-			info: [],
-			header: [],
-		})
-	}	
 })
 
 app.listen(port, () => {

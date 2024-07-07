@@ -1,12 +1,15 @@
 import { Station } from './Stations/Station';
 import {DateUtils} from './Utils/Date';
 import { TableUtils } from './Utils/Table';
-import {ParagraphUtils} from './Utils/Paragraph';
 import {DateRangePicker } from 'vanillajs-datepicker';
+import ForecastWeek from '@/components/ForecastWeek.vue';
 import 'vanillajs-datepicker/css/datepicker-bs5.css';
 
 export default {
     name: "DataStatMenu",
+    components:{
+      ForecastWeek
+    },
     data() {
       return {
         years: [],
@@ -46,6 +49,7 @@ export default {
         const datePickerElement = document.querySelector('#rowDatePicker')
         titleElement.style.display = '';
         datePickerElement.style.display = '';
+        
       },
 
       // loadDatapicker(){
@@ -122,11 +126,10 @@ export default {
           totalMonthlyHTML += TableUtils.generateHTMLWithTitle(months[i], monthlyStatsHeaders, monthlyStats[i]);
         }
         this.T5_2_statsMensuel = totalMonthlyHTML;
-
-        let forecastHeader = Station.getForecastViewHeader();
-        let forecastStats = Station.getForecastView();
         
-        this.T3_1_forecast+=ParagraphUtils.generateParagraphWithTitle("Prévision",forecastHeader,forecastStats);
+        
+        
+        
       },
 
       load() {
@@ -134,6 +137,7 @@ export default {
           context.loadDates();
   
           let stationID = Number.parseInt(Station.stationInventory[0]["Station ID"]);
+          ForecastWeek.methods.getForecastView(stationID);
             Station.loadStationMetrics(stationID, context, (context) => {
               context.loadStationData();
             });
