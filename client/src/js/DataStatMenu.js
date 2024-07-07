@@ -14,6 +14,9 @@ export default {
 		ForecastWeek
 	},
 
+    components:{
+      ForecastWeek
+    },
 	data() {
 		return {
 			years: [],
@@ -21,6 +24,7 @@ export default {
 			T4_1_vueDonnees_HTML: "",
 			T5_1_statsGlob_HTML: "",
 			T5_2_statsMensuel: "",
+        T3_1_forecast:"",
 			datepicker: DateRangePicker
 		};
 	},

@@ -37,6 +37,14 @@
 	max-height: 65vh;
 }
 
+  .span-forecast{
+    font-weight: bold;
+  }
+
+  .paragraph-forecast{
+    text-align: left;
+  }
+
 /* Partie data/stats */
 
 .dataTitle {
