@@ -1,3 +1,4 @@
+import { StationForecast } from './stations/StationForecast.js';
 import { StationMapping } from './stations/StationMapping.js';
 import { StationPastHourlyForecast } from './stations/StationPastHourlyForecast.js';
 

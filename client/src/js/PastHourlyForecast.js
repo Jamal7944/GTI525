@@ -1,4 +1,4 @@
-import {TableUtils} from "./Utils/Table";
+import { TableUtils } from "./Utils/Table";
 
 export default {
 	name: "PastHourlyForecast",
@@ -42,17 +42,17 @@ export default {
 			}
 
 			let info = {
-				headers: {"Content-Type": "application/json"},
+				headers: { "Content-Type": "application/json" },
 				method: "POST",
 				mode: "cors",
 				body: JSON.stringify(body)
 			};
 
 			fetch("http://localhost:8081/station/past-hourly-forecast", info).then(async (response) => {
-				if(response.ok) {
+				if (response.ok) {
 					let text = await response.text();
 					console.log(text);
-	
+
 					let result = JSON.parse(text);
 					console.log(result);
 					this.pastHourlyForecastHtml = result["info"].length == 0 ? TableUtils.generateError("") : TableUtils.generateHTML(result["header"], result["info"]);

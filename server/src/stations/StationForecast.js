@@ -28,7 +28,7 @@ export class StationForecast {
 					let itemTitle = xmlDoc.getElementsByTagName("title")[0].textContent;
 					let link = xmlDoc.getElementsByTagName("link")[0]
 					let href = "";
-					if (link) 
+					if (link)
 						href = link.getAttribute("href");
 
 					let itemUpdate = xmlDoc.getElementsByTagName("updated")[0].textContent;
@@ -53,7 +53,7 @@ export class StationForecast {
 					resultArr = [itemTitle, href, itemUpdate, Alarm, conditionActuel, forecastDetails];
 				})
 				.catch(error => console.error('Error fetching the RSS feed:', error));
-		} 
+		}
 		else {
 			console.log('No RSS feed found for the given station ID.');
 		}

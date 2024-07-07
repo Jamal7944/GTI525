@@ -1,7 +1,7 @@
-import {Station} from "./Stations/Station";
-import {DateUtils} from "./Utils/Date";
-import {TableUtils} from "./Utils/Table";
-import {DateRangePicker} from "vanillajs-datepicker";
+import { Station } from "./Stations/Station";
+import { DateUtils } from "./Utils/Date";
+import { TableUtils } from "./Utils/Table";
+import { DateRangePicker } from "vanillajs-datepicker";
 import PastHourlyForecast from "@/components/PastHourlyForecast.vue";
 import ForecastWeek from '@/components/ForecastWeek.vue';
 import "vanillajs-datepicker/css/datepicker-bs5.css";
@@ -14,9 +14,6 @@ export default {
 		ForecastWeek
 	},
 
-    components:{
-      ForecastWeek
-    },
 	data() {
 		return {
 			years: [],
@@ -24,7 +21,7 @@ export default {
 			T4_1_vueDonnees_HTML: "",
 			T5_1_statsGlob_HTML: "",
 			T5_2_statsMensuel: "",
-        T3_1_forecast:"",
+			T3_1_forecast: "",
 			datepicker: DateRangePicker
 		};
 	},
@@ -44,14 +41,14 @@ export default {
 			return temp[0] + "/" + temp[2];
 		},
 
-		hideMenu_OnClick(){
+		hideMenu_OnClick() {
 			const titleElement = document.querySelector('h4.dataTitle');
 			const datePickerElement = document.querySelector('#rowDatePicker')
 			titleElement.style.display = 'none';
 			datePickerElement.style.display = 'none';
 		},
 
-		showMenu_OnClick(){
+		showMenu_OnClick() {
 			const titleElement = document.querySelector('h4.dataTitle');
 			const datePickerElement = document.querySelector('#rowDatePicker')
 			titleElement.style.display = '';

@@ -1,6 +1,7 @@
 import Papa from "papaparse"; // Importez Papaparse
 import DataStatMenu from "./DataStatMenu";
 import PastHourlyForecast from "./PastHourlyForecast";
+import ForecastWeek from "./ForecastWeek";
 
 export default {
 	name: "NavigationMenu",
@@ -20,7 +21,7 @@ export default {
 				const response = await fetch("/Laboratoire_1_-_Enonces-20240516/Lab1_CSV/Station Inventory EN.csv");
 				const csvText = await response.text();
 				const validIDs = ["118", "1865", "2205", "3002", "3328", "3698", "4337", "4789", "4932", "5097", "5251", "5415", "6207", "6358", "6633", "6720"];
-				this.ListeStations = Papa.parse(this.removeFirstLines(csvText, 3), {header: true}).data.filter((data) => {
+				this.ListeStations = Papa.parse(this.removeFirstLines(csvText, 3), { header: true }).data.filter((data) => {
 					return validIDs.includes(data["Station ID"]);
 				});
 
