@@ -1,25 +1,21 @@
-import NavigationMenu from '@/components/NavigationMenu.vue'; 
-import DataStatMenu from '@/components/DataStatMenu.vue';
-import api from '../Services/ApiUtils';
-import 'bootstrap'
-
+import NavigationMenu from "@/components/NavigationMenu.vue";
+import DataStatMenu from "@/components/DataStatMenu.vue";
+import api from "../Services/ApiUtils";
+import "bootstrap";
 
 export default {
-  components: {
-    NavigationMenu,
-    DataStatMenu
-  },
-  name: "App",
-  data() {
-    return {
-    };
-  },
+	components: {
+		NavigationMenu,
+		DataStatMenu
+	},
+	name: "App",
+	data() {
+		return {};
+	},
 
-  mounted() {
-    api.fetchDataGET(),
-    api.fetchDataPOST()
-  },
+	mounted() {
+		api.fetchDataGET(), api.fetchDataPOST();
+	},
 
-  methods: {
-  }
+	methods: {}
 };

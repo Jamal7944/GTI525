@@ -1,0 +1,8 @@
+node_modules
+dist
+archive
+public
+src/html
+src/css
+src/components
+src/assets

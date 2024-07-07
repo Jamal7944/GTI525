@@ -1,23 +1,29 @@
-  <!-- TODO : START COMPONENT HERE -->
-  <div id="navTab">
-      <ul> <button class="btn btn-outline-primary" v-on:click="expandStations();">Toutes les stations</button></ul>
+<!-- TODO : START COMPONENT HERE -->
+<div id="navTab">
+	<ul>
+		<button class="btn btn-outline-primary" v-on:click="expandStations();">
+			Toutes les stations
+		</button>
+	</ul>
 
-      <div class="accordion" id="accordionNavigation">
-        <div v-for="(stations, province, index) in ProvinceStations" :key="province" class="accordion-item">
-          <h2 class="accordion-header" id="heading{{ index }}">
-            <button class="accordion-button collapsed" :id="'buttonNav' + index" type="button" v-on:click="selectStations({ index });" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" aria-expanded="false" :aria-controls="'collapse' + index">
-              {{ province }}
-            </button>
-          </h2>
-          <div :id="'collapse' + index" class="accordion-collapse collapse" aria-labelledby="heading{{ index }}" data-bs-parent="#accordionNavigation">
-            <div class="accordion-body">
-              <button @click="LoadDataStation(station['Station ID'])" v-for="(station, stationIndex) in stations" :key="stationIndex" class="btn btn-primary">{{ station.Name }}</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-  
-  </div>
-
-  
+	<div class="accordion" id="accordionNavigation">
+		<div v-for="(stations, province, index) in ProvinceStations" :key="province" class="accordion-item">
+			<h2 class="accordion-header" id="heading{{ index }}">
+				<button class="accordion-button collapsed" :id="'buttonNav' + index" type="button"
+					v-on:click="selectStations({ index });" data-bs-toggle="collapse"
+					:data-bs-target="'#collapse' + index" aria-expanded="false" :aria-controls="'collapse' + index">
+					{{ province }}
+				</button>
+			</h2>
+			<div :id="'collapse' + index" class="accordion-collapse collapse" aria-labelledby="heading{{ index }}"
+				data-bs-parent="#accordionNavigation">
+				<div class="accordion-body">
+					<button @click="LoadDataStation(station['Station ID'])" v-for="(station, stationIndex) in stations"
+						:key="stationIndex" class="btn btn-primary">
+						{{ station.Name }}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

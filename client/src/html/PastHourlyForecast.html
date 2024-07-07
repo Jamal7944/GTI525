@@ -1,0 +1,7 @@
+<div>
+    year: <input type="text" id="PHF-year"></input><br>
+    month: <input type="text" id="PHF-month"></input><br>
+    day: <input type="text" id="PHF-day"></input><br>
+    <button v-on:click="searchButton_onClick()">Search</button><br>
+    <div id="past-hourly-forecast-result" v-html="pastHourlyForecastHtml"></div>
+</div>
