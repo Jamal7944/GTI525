@@ -18,13 +18,13 @@ export default {
 		changeID(id) {
 			this.stationID = Number.parseInt(id);
 			console.log(this.stationID);
-			// not supposed to be NaN.
+			document.getElementById("PHF-id").textContent = id;
 		},
 
 		searchButton_onClick() {
 			//let stnID = Number.parseInt(document.getElementById("PHF-stnID").value);
 			console.log(this.stationID);
-			let stnID = this.stationID;
+			let stnID = Number.parseInt(document.getElementById("PHF-id").textContent);
 			let y = Number.parseInt(document.getElementById("PHF-year").value);
 			let m = Number.parseInt(document.getElementById("PHF-month").value);
 			let d = Number.parseInt(document.getElementById("PHF-day").value);
