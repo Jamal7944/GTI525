@@ -163,8 +163,7 @@ L'une des contraintes du laboratoire portait sur l'utilisation du systèmes de m
 Parmis les modules importés on retrouve par exemple les différents modules javascripts liés aux components tels que *NavigationMenu* ou *DataStatMenu* qui sont importés dans le fichier *Vue.js*, le module du component parent *App.vue*
 On peut aussi citer les librairies publiques telles que _[papaparse](https://www.npmjs.com/package/papaparse)_.
 Pour exporter nos modules nous avons optés pour deux façons de faire. Tout d'abord celle utilisée par *Vue* pour définir le module javascript d'un composant avec "*export default {}*". Nous avons aussi utilisé la syntaxe "*module.export*" pour exporter des variables ou des fonctions (classes).
-Afin de 
-
+Nous avons par ailleurs régulièrement rencontré un problème d'import lié à la syntaxe utilisée au niveau du fichier d'import. En effet en omettant le *.js* à la fin du fichier dans le nom du chemin (relatif ou absolu) le module exporté n'était pas correctement trouvé et l'import ne fonctionnait pas.
 ## Conclusion
 <!-- R6: Notez qu'une brève introduction et conclusion est également demandée. -->
-Le point principale du second laboratoire a été la mise en place de l'application dorsale et toutes les modifications qui en ont découlées. Nous avons du revoir l'architecture globale du projet et ajuster le système d'import pour convenir à la contrainte technique du laboratoire. La mise en place du server backend a permis d'organiser la communication avec les APIs externes pour ajouter des fonctionnalités à notre application.
+Le point principale du second laboratoire a été la mise en place de l'application dorsale et toutes les modifications qui en ont découlées. Nous avons du revoir l'architecture globale du projet et ajuster le système d'import pour convenir à la contrainte technique du laboratoire. La mise en place du server backend a permis d'organiser la communication avec les APIs externes pour ajouter des fonctionnalités à notre application. Toujours en adaptant la structure du cadriciel _[Vue.JS](https://vuejs.org/)_ nous avons créer de nouveaux composant pour chaque nouvelle fonctionnalité.
