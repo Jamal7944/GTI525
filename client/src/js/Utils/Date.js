@@ -15,6 +15,18 @@ export class DateUtils {
 	}
 
 	/**
+	 * Retourne un tableau contenant les jours d'un mois.
+	 */
+	static getDays() {
+		let d = [];
+		for(let i = 1; i <= 31; i++) {
+			d.push(i);
+		}
+
+		return d;
+	}
+
+	/**
 	 *
 	 * @returns Retourne un tableau contenant les mois de l'année
 	 */

@@ -3,7 +3,7 @@ import {ObjParser} from "../utility/Parser.js"
 import { Result } from "../utility/Result.js";
 
 export class StationPastHourlyForecast {
-	static #getPastHourlyRelevantInfo(objRow) {
+	static #getPastHourlyRelevantInfo(objRow, day) {
 		let temp = Number.parseFloat(objRow["Temp (°C)"]);
 		let windChill = 0;
 		let humidex = 0;
@@ -17,15 +17,14 @@ export class StationPastHourlyForecast {
 			: Number.parseInt(objRow["Hmdx"]);
 
 		return {
-			//_wndChill: windChill,
-			//_hmdx: humidex,
+			dateTime: objRow["Date/Time (LST)"],
 			trueTemp: temp,
 			feltTemp: temp + windChill + humidex,
-			weather: objRow["Weather"],
-			humidity:Number.parseFloat( objRow["Rel Hum (%)"]),
-			windDirection: Number.parseFloat(objRow["Wind Dir (10s deg)"]),
-			windSpeed: Number.parseFloat(objRow["Wind Spd (km/h)"]),
-			atmosPressure: Number.parseFloat(objRow["Stn Press (kPa)"])
+			weather: (objRow["Weather"] == null) ? "Non disponible" : objRow["Weather"],
+			humidity: Number.isNaN(Number.parseFloat( objRow["Rel Hum (%)"])) ? "Non disponible" : Number.parseFloat( objRow["Rel Hum (%)"]),
+			windDirection: Number.isNaN(Number.parseFloat(objRow["Wind Dir (10s deg)"])) ? "Non disponible" : Number.parseFloat(objRow["Wind Dir (10s deg)"]),
+			windSpeed: Number.isNaN(Number.parseFloat(objRow["Wind Spd (km/h)"])) ? "Non disponible" : Number.parseFloat(objRow["Wind Spd (km/h)"]),
+			atmosPressure: Number.isNaN(Number.parseFloat(objRow["Stn Press (kPa)"])) ? "Non disponible" : Number.parseFloat(objRow["Stn Press (kPa)"])
 		};
 	}
 
@@ -53,6 +52,7 @@ export class StationPastHourlyForecast {
 
 	static getPastHourlyForecastHeader() {
 		return [
+			"Heure & Date",
 			"Température réelle",
 			"Température ressentie",
 			"Météo",
@@ -73,8 +73,16 @@ export class StationPastHourlyForecast {
 			let obj = ObjParser.csvToObj(csv, 0);
 	
 			obj.forEach((row) => {
-				let data = this.#getPastHourlyRelevantInfo(row);
-				result.push(data);
+				let timestamp = new String(row["Date/Time (LST)"]).split(" ")[0];
+				let timestampDay = Number.parseInt(timestamp.split("-")[2]); // yyyy-MM-dd HH:mm
+				let specifiedDay = Number.parseInt(day);
+
+				// on vérifie si le jour correspond à celui demandé puisque
+				// le fetch nous donne un .CSV pour le mois au complet. 
+				if(timestampDay == specifiedDay) {
+					let data = this.#getPastHourlyRelevantInfo(row);
+					result.push(data);
+				}					
 			});
 	
 			log.info(`Gathered ${result.length} rows with id ${id}.`);

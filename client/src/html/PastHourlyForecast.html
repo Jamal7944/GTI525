@@ -1,8 +1,19 @@
 <div>
     <p id="PHF-id" hidden>0</p>
-    year: <input type="text" id="PHF-year"></input><br>
-    month: <input type="text" id="PHF-month"></input><br>
-    day: <input type="text" id="PHF-day"></input><br>
-    <button v-on:click="searchButton_onClick()">Search</button><br>
-    <div id="past-hourly-forecast-result" v-html="pastHourlyForecastHtml"></div>
+    Année: <select id="PHF-year" class="form-select" v-on:change="searchButton_onClick()">
+        <option v-for="(year) in years">{{year}}</option>
+    </select>
+    <br>
+    Mois: <select id="PHF-month" class="form-select" v-on:change="searchButton_onClick()">
+        <option v-for="(name) in monthNames">{{name}}</option>
+    </select>
+    <br>
+    Jour: <select id="PHF-day" class="form-select" v-on:change="searchButton_onClick()">
+        <option v-for="(day) in days">{{day}}</option>
+    </select>
+    <br>
+    <!--<button class="btn btn-outline-primary" v-on:click="searchButton_onClick()">Rechercher</button>-->
+    <button class="btn btn-outline-primary" v-on:click="clear()">Effacer</button>
+    <br><br>
+    <div id="PHF-result"></div>
 </div>
