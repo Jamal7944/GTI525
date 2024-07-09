@@ -1,5 +1,5 @@
 <h1 align=center> GTI525 - Laboratoire #02 </h1>
-<h2 align=center style="color:grey"><i>code dorsale et API</i><h2>
+<h2 align=center style="color:grey"><i>Code dorsale et API</i><h2>
 <br>
 
 <table align=center>
