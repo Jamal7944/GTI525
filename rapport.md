@@ -157,7 +157,7 @@ Objet -> Json -> ...
 ## 3. Gestion des conditions d'erreur
 <!-- R3: Comment gérez-vous les conditions d'erreurs des différentes requêtes (du "front-end" au "back-end" ainsi que du "back-end" aux APIs externes), tant du point de vue de votre code que dans l'interface de votre site? -->
 Parler des try catch, promesses utilisées ? 
-## 4. code dorsale et module ES6
+## 4. Code dorsale et module ES6
 <!-- R4: Décrivez de quelle manière votre code dorsal utilise le système de modules ES6. Mentionnez les modules importés et/ou exportés. Avez-vous rencontré certaines problématiques particulières?  -->
 L'une des contraintes du laboratoire portait sur l'utilisation du systèmes de modules ES6 et non CommonJS. Cela recquiert de mentionner le mot clé *import* et non *require* pour utiliser une librairie ou simplement un fichier externe. 
 Parmis les modules importés on retrouve par exemple les différents modules javascripts liés aux components tels que *NavigationMenu* ou *DataStatMenu* qui sont importés dans le fichier *Vue.js*, le module du component parent *App.vue*
