@@ -1,15 +1,28 @@
 <div>
-    Année: <select id="PHF-year" class="form-select" v-on:change="search()">
-        <option v-for="(year) in years">{{year}}</option>
-    </select>
-    <br>
-    Mois: <select id="PHF-month" class="form-select" v-on:change="search()">
-        <option v-for="(name) in monthNames">{{name}}</option>
-    </select>
-    <br>
-    Jour: <select id="PHF-day" class="form-select" v-on:change="search()">
-        <option v-for="(day) in days">{{day}}</option>
-    </select>
-    <br><br>
-    <div id="PHF-result"></div>
+    <div class="row">
+        <div class="col-3">
+            <p id="PHF-id" hidden>0</p>
+            Année: <select id="PHF-year" class="form-select" v-on:change="search()">
+                <option v-for="(year) in years">{{year}}</option>
+            </select>
+        </div>
+        <div class="col-3">
+            Mois: <select id="PHF-month" class="form-select" v-on:change="search()">
+                <option v-for="(name) in monthNames">{{name}}</option>
+            </select>
+        </div>
+        <div class="col-3">
+
+            Jour: <select id="PHF-day" class="form-select" v-on:change="search()">
+                <option v-for="(day) in days">{{day}}</option>
+            </select>
+        </div>
+        <div class="col-3" style="margin: auto;">
+            <button class="btn btn-outline-primary" v-on:click="clear()">Effacer</button>
+        </div>
+    </div>
+
+
+    <!--<button class="btn btn-outline-primary" v-on:click="searchButton_onClick()">Rechercher</button>-->
+    <div id="PHF-result" style="margin-top: 2rem;"></div>
 </div>

@@ -1,6 +1,6 @@
-import { Station } from "./Stations/Station";
 import { DateUtils } from "./Utils/Date";
 import { TableUtils } from "./Utils/Table";
+import { Station } from "./Stations/Station";
 
 export default {
 	name: "PastHourlyForecast",
@@ -22,7 +22,20 @@ export default {
 	},
 
 	methods: {
+		changeID(id) {
+			this.clear();
+			document.getElementById("PHF-id").textContent = id;
+		},
+
+		clear() {
+			document.getElementById("PHF-year").selectedIndex = 0;
+			document.getElementById("PHF-month").selectedIndex = 0;
+			document.getElementById("PHF-day").selectedIndex = 0;
+			document.getElementById("PHF-result").innerHTML = TableUtils.generateNotAvailable();
+		},
+
 		search() {
+			document.getElementById("PHF-result").innerHTML = '<div class="spinner-border" style="margin-bottom:2rem" role="status"><span class="sr-only"></span></div>'
 			let stnID = Station.getID();
 			let y = Number.parseInt(document.getElementById("PHF-year").value);
 			let m = Number.parseInt(document.getElementById("PHF-month").selectedIndex + 1);
@@ -51,7 +64,6 @@ export default {
 				body: JSON.stringify(body)
 			};
 
-			document.getElementById("PHF-result").innerHTML = TableUtils.generateError("Chargement...");
 			fetch("http://localhost:8081/station/past-hourly-forecast", info).then(async (response) => {
 				if (response.ok) {
 					let text = await response.text();
