@@ -87,7 +87,36 @@ Afin de conserver une structure facile à manipuler nous avons décidé de divis
 
 ### Front-End (Lab01)
 Nous reprenons le code issu du premier laboratoire avec son cadriciel _[Vue.JS](https://vuejs.org/)_ et la librairie _[Bootstrap](https://getbootstrap.com/)_. Les vrais changement apportés concernent les deux nouveaux  *components* apportés à savoir *ForecastWeek.vue* et *PastHourlyForecast.vue*
+
+### Prevision:
+#### ForecastWeek.html
+Ce fichier html est utilisé comme « template » pour le fichier de vue. Il consiste d’un « div » avec un « ID = Forecastweek-result » et une commande « v-html=ForecastHtmlWeek » afin d’intégrer le résultat remis par le fichier ForeWeek.js
+#### ForecastWeek.vue
+Cette vue consiste de rassembler le template html qui se retrouve dans « ForecastWeek.html », le code Javascript associé (nommé ForecastWeek.js) et les fichier CSS de Vue.css et main.css.
+#### ForecastWeek.js
+Ce fichier s’occupe de l’intégration des prévisions sur la page « Prévision ». Pour expliquer en détails, on importe une classe créer spécifiquement pour intégrer les informations obtenues du « Back-end » dans une tab de façon organisé. Cette classe « ParagraphUtil » s’occupe aussi des générations d’erreurs. 
+On commence la classe par initialiser la valeur du ForecastHtmlWeek (qui est relié directement au ForecastHtmlWeek dans le fichier html) avec une erreur parce qu’on assume que s’il n’y a pas d’appel de la fonction « getForecastView », il doit avoir une erreur de disponibilité.
+##### Method : 
+##### getForecastView(stationID)
+Dans cette méthode, on demande d’avoir l’identification de la station afin de faire la bonne demande dans le « Back-end ». De plus, on assigne getForecastView comme fonction « async ».  On fait la demande en utilisant un « await fetch » (la raison pourquoi on utilise async) pour faire la demande dans le « Back-end », on inclut l’identification de la station dans la demande. Quand on reçoit le résultat, on vérifie que la valeur et bien retourné. Si oui, on intègre l’information dans une valeur « data » et on l’utilise pour organiser une valeur tableau. On utilise le tableau avec « ParagraphUtil » et « getForecastViewHeader » pour créer un texte qui serait retourné à la vue.
+##### getForecastViewHeader()
+Renvoie l'en-tête de chaque ligne.
+
+
 ### Back-End
+
+#### Prévison
+#### StationForecast.js
+Ce fichier JavaScript définit une classe « StationForecast » qui contient une méthode statique async « getForecast » pour obtenir les prévisions météorologiques d'une station donnée en utilisant son ID.
+#### Importation :
+Fs : Module Node.js afin de lire les fichiers
+
+DOMParser : Module xmldom pour analyser les chaînes XML.
+La classe « StationForecast » :
+#### Méthode :
+#### getForecast(stationID) :
+On commence pas initialisé la valeur de retour « resultArr » et on lie le fichier « station_mapping.json ». On compare le stationID qu’on reçoit avec les données reçues du fichier JSON et on store le bon « URL » de la station choisie dans la valeur appropriée. On va utiliser la valeur « url » pour faire un « await fetch » sur le fichier xml en ligne. Vue qu’on reçoit un String on utilise DOMParser pour convertir la réponse « String » en valeur que nous pouvions naviguer. En utilisant les fonctions du DOMParser (comme getElementsByTagName et getAttributes) nous somme capable d’aller chercher les valeurs du titre, lien, la mise à jour, la prévision actuelle, l’alarme et les prévisions des prochains jours (incluant les sommaire simples et détaillés). Pour les valeurs de titre, lien, la mise à jour, la prévision actuelle et alarme, nous naviguons de manière simple en utilisant les fonctions mentionnées plus haut. Pour les prévisions des prochains jours, on utilise une boucle « for » afin de naviguer chaque entrée en ignorant les entrées utilisées pour les informations déjà capturé. Chaque entrée est insérée dans une valeur tableau. Quand toutes les informations sont insérés dans « resultArr » , on fait le retour de celle-ci.
+On utilise un « then/catch » si le site n’existe pas et on vérifie avec un « if » si l’url n’est pas vide.
 
 Voici l'arborescence globale de l'application
 
@@ -151,12 +180,25 @@ Voici l'arborescence globale de l'application
 Gestion des classes
 Classe parser
 Objet -> Json -> ...
+
+#### ParagraphUtil.js
+Une création d'équipe qui permet de traiter les informations reçu pour, ensuite, créer un paragraph.
+
+#### DOMParser (xmlDom)
+Une création de xmlDom qui a permis convertir la réponse String du site en valeur xml de façon que l'on puisse naviguer facilement.
+
 ### 2.1 Gestion des données manquantes
 <!-- ...Décrivez également comment vous gérez (du point de vue interface et de votre code) les données demandées par l'utilisateur qui sont manquantes dans les sources externes (par exemple, les informations météo historiques qui ne sont pas disponibles pour une station et journée donnée). -->
 
 ## 3. Gestion des conditions d'erreur
 <!-- R3: Comment gérez-vous les conditions d'erreurs des différentes requêtes (du "front-end" au "back-end" ainsi que du "back-end" aux APIs externes), tant du point de vue de votre code que dans l'interface de votre site? -->
 Parler des try catch, promesses utilisées ? 
+#### Front-end: ForecastWeek.js
+On utilise un if pour vérifier si la réponse du Back-end est bonne.
+#### Back-end: StationForecast.js:
+On utilise un then/catch si le site web n’existe pas ou ne renvoie pas un fichier xml. Ensuite, on utilise un if pour vérifier si l’url n’est pas vide. 
+
+
 ## 4. Code dorsale et module ES6
 <!-- R4: Décrivez de quelle manière votre code dorsal utilise le système de modules ES6. Mentionnez les modules importés et/ou exportés. Avez-vous rencontré certaines problématiques particulières?  -->
 L'une des contraintes du laboratoire portait sur l'utilisation du systèmes de modules ES6 et non CommonJS. Cela recquiert de mentionner le mot clé *import* et non *require* pour utiliser une librairie ou simplement un fichier externe. 
