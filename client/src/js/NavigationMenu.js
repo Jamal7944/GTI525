@@ -2,6 +2,7 @@ import Papa from "papaparse"; // Importez Papaparse
 import DataStatMenu from "./DataStatMenu";
 import PastHourlyForecast from "./PastHourlyForecast";
 import ForecastWeek from "./ForecastWeek";
+import { Station } from "./Stations/Station";
 
 export default {
 	name: "NavigationMenu",
@@ -45,7 +46,7 @@ export default {
 		},
 		LoadDataStation(id) {
 			console.log(id);
-			PastHourlyForecast.methods.changeID(id);
+			Station.setID(id);
 			PastHourlyForecast.methods.search();
 			ForecastWeek.methods.getForecastView(id);
 			DataStatMenu.methods.stationSelectorChange(id);

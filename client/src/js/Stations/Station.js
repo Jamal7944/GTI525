@@ -3,9 +3,18 @@ import {DateUtils} from "../Utils/Date";
 import {ObjParser} from "../Utils/Parser";
 
 export class Station {
+	static id = 0; 
 	static stationInventory = [];
 	static stationMetrics = [];
 	static validIDs = ["118", "1865", "2205", "3002", "3328", "3698", "4337", "4789", "4932", "5097", "5251", "5415", "6207", "6358", "6633", "6720"];
+
+	static setID(id) {
+		this.id = id;
+	}
+
+	static getID() {
+		return this.id;
+	}
 
 	/**
 	 * Charges l'inventaire de station météo.

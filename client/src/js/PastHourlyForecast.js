@@ -1,3 +1,4 @@
+import { Station } from "./Stations/Station";
 import { DateUtils } from "./Utils/Date";
 import { TableUtils } from "./Utils/Table";
 
@@ -21,23 +22,20 @@ export default {
 	},
 
 	methods: {
-		changeID(id) {
-			this.clear();
-			document.getElementById("PHF-id").textContent = id;
-		},
-
-		clear() {
-			document.getElementById("PHF-year").selectedIndex = 0;
-			document.getElementById("PHF-month").selectedIndex = 0;
-			document.getElementById("PHF-day").selectedIndex = 0;
-			document.getElementById("PHF-result").innerHTML = TableUtils.generateNotAvailable();
-		},
-
 		search() {
-			let stnID = Number.parseInt(document.getElementById("PHF-id").textContent);
+			let stnID = Station.getID();
 			let y = Number.parseInt(document.getElementById("PHF-year").value);
 			let m = Number.parseInt(document.getElementById("PHF-month").selectedIndex + 1);
 			let d = Number.parseInt(document.getElementById("PHF-day").value);
+
+			if (Number.isNaN(stnID) || Number.isNaN(y) || Number.isNaN(m) || Number.isNaN(d)) {
+				// il y a un bug avec comment vue.js fonctionne...
+				// on dirait que les select box ne se remplissent pas avant que le search soit exécuté...
+				y = 1900;
+				m = 1;
+				d = 1;
+				// c'est la date par défaut qui s'affiche lorsqu'on clique pour la première fois sur l'onglet.
+			}
 
 			let body = {
 				stationID: stnID,
@@ -45,11 +43,6 @@ export default {
 				month: m,
 				day: d
 			};
-
-			if (Number.isNaN(stnID) || Number.isNaN(y) || Number.isNaN(m) || Number.isNaN(d)) {
-				document.getElementById("PHF-result").innerHTML = TableUtils.generateError("One or more of the inputs is not a number.");
-				return;
-			}
 
 			let info = {
 				headers: { "Content-Type": "application/json" },
@@ -73,7 +66,7 @@ export default {
 						document.getElementById("PHF-result").innerHTML = TableUtils.generateHTMLWithTitle("Prévisions pour le " + y + "/" + m + "/" + d, result["header"], result["info"]);
 				}
 				else {
-					console.log(await response.text());
+					document.getElementById("PHF-result").innerHTML = await response.text();
 				}
 			});
 		}
