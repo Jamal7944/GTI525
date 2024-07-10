@@ -12,11 +12,12 @@ export default {
 	},
 
 	mounted() {
-		document.getElementById("PHF-result").innerHTML = TableUtils.generateNotAvailable();
+		document.getElementById("PHF-result").innerHTML = "";
 		let currentYear = Number.parseInt(new Date().getFullYear());
 		this.years = DateUtils.getYears(1900, currentYear);
 		this.monthNames = DateUtils.getMonths()
 		this.days = DateUtils.getDays();
+		this.search();
 	},
 
 	methods: {
@@ -32,7 +33,7 @@ export default {
 			document.getElementById("PHF-result").innerHTML = TableUtils.generateNotAvailable();
 		},
 
-		searchButton_onClick() {
+		search() {
 			let stnID = Number.parseInt(document.getElementById("PHF-id").textContent);
 			let y = Number.parseInt(document.getElementById("PHF-year").value);
 			let m = Number.parseInt(document.getElementById("PHF-month").selectedIndex + 1);
@@ -46,7 +47,7 @@ export default {
 			};
 
 			if (Number.isNaN(stnID) || Number.isNaN(y) || Number.isNaN(m) || Number.isNaN(d)) {
-				this.pastHourlyForecastHtml = TableUtils.generateError("One or more of the inputs is not a number.");
+				document.getElementById("PHF-result").innerHTML = TableUtils.generateError("One or more of the inputs is not a number.");
 				return;
 			}
 
@@ -57,6 +58,7 @@ export default {
 				body: JSON.stringify(body)
 			};
 
+			document.getElementById("PHF-result").innerHTML = TableUtils.generateError("Chargement...");
 			fetch("http://localhost:8081/station/past-hourly-forecast", info).then(async (response) => {
 				if (response.ok) {
 					let text = await response.text();
@@ -66,7 +68,7 @@ export default {
 					console.log(result);
 					
 					if(result["info"].length == 0) 
-						document.getElementById("PHF-result").innerHTML = TableUtils.generateNotAvailable();
+						document.getElementById("PHF-result").innerHTML = TableUtils.generateError("Données non disponibles pour " + y + "/" + m + "/" + d + ". Veuillez choisir une autre journée.");
 					else 
 						document.getElementById("PHF-result").innerHTML = TableUtils.generateHTMLWithTitle("Prévisions pour le " + y + "/" + m + "/" + d, result["header"], result["info"]);
 				}

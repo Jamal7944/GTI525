@@ -1,14 +1,14 @@
 <div>
     <p id="PHF-id" hidden>0</p>
-    Année: <select id="PHF-year" class="form-select" v-on:change="searchButton_onClick()">
+    Année: <select id="PHF-year" class="form-select" v-on:change="search()">
         <option v-for="(year) in years">{{year}}</option>
     </select>
     <br>
-    Mois: <select id="PHF-month" class="form-select" v-on:change="searchButton_onClick()">
+    Mois: <select id="PHF-month" class="form-select" v-on:change="search()">
         <option v-for="(name) in monthNames">{{name}}</option>
     </select>
     <br>
-    Jour: <select id="PHF-day" class="form-select" v-on:change="searchButton_onClick()">
+    Jour: <select id="PHF-day" class="form-select" v-on:change="search()">
         <option v-for="(day) in days">{{day}}</option>
     </select>
     <br>

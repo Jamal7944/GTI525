@@ -46,6 +46,7 @@ export default {
 		LoadDataStation(id) {
 			console.log(id);
 			PastHourlyForecast.methods.changeID(id);
+			PastHourlyForecast.methods.search();
 			ForecastWeek.methods.getForecastView(id);
 			DataStatMenu.methods.stationSelectorChange(id);
 			document.getElementById("station_displayed_id").innerHTML = this.ListeStations.find((objet) => objet["Station ID"] === id).Name;

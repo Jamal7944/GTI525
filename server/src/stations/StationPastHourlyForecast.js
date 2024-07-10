@@ -3,27 +3,81 @@ import {ObjParser} from "../utility/Parser.js"
 import { Result } from "../utility/Result.js";
 
 export class StationPastHourlyForecast {
-	static #getPastHourlyRelevantInfo(objRow, day) {
-		let temp = Number.parseFloat(objRow["Temp (°C)"]);
-		let windChill = 0;
-		let humidex = 0;
+	// source: https://www.weather.gov/ama/heatindex
+	static #c1 = -42.379;
+	static #c2 = 2.04901523;
+	static #c3 = 10.14333127;
+	static #c4 = -0.22475541;
+	static #c5 = -6.83783 * Math.pow(10, -3);
+	static #c6 = -5.481717 * Math.pow(10, -2);
+	static #c7 = 1.22874 * Math.pow(10, -3);
+	static #c8 = 8.5282 * Math.pow(10, -4);
+	static #c9 = -1.99 * Math.pow(10, -6);
 
-		windChill = (objRow["Wind Chill"] == "") 
-			? 0 
-			: Number.parseInt(objRow["Wind Chill"]);
+	static #convertCtoF(C) {
+		return C * (9 / 5) + 32;
+		// source: https://d138zd1ktt9iqe.cloudfront.net/media/seo_landing_files/c-to-f-formula-1638963368.png
+	}
 
-		humidex = (objRow["Hmdx"] == "") 
-			? 0
-			: Number.parseInt(objRow["Hmdx"]);
+	static #convertFtoC(F) {
+		return (F - 32) / 1.8;
+		// source: https://www.calculatorsoup.com/images/calculators/converters/fahrenheit_to_celsius_c18.png
+	}
 
+	static #getFeltTemperature(trueTemperature, relativeHumidity, windSpeed) {
+		if(trueTemperature === "Non disponible")
+			return "Non disponible";
+
+		// refroidissment éolien | source : https://fr.wikipedia.org/wiki/Temp%C3%A9rature_ressentie
+		if(trueTemperature < 10) {
+			if(windSpeed === "Non disponible")
+				return "Non disponible";
+
+			if(windSpeed > 4.8) {
+				let result = 13.12 + 0.6215 * trueTemperature - 11.37 * Math.pow(windSpeed, 0.16) + 0.3965 * trueTemperature * Math.pow(windSpeed, 0.16);
+				return result.toFixed(2);
+			}
+			else {
+				let result = trueTemperature + 0.2 * (0.1345 * trueTemperature - 1.59) * windSpeed;
+				return result.toFixed(2);
+			}
+		}
+
+		// indice de chaleur | source https://www.weather.gov/ama/heatindex
+		else {
+			if(relativeHumidity === "Non disponible")
+				return "Non disponible";
+
+			let F = this.#convertCtoF(trueTemperature);
+			let t1 = this.#c1;
+			let t2 =  this.#c2 * F; 
+			let t3 = this.#c3 * relativeHumidity;
+			let t4 = this.#c4 * F * relativeHumidity;
+			let t5 = this.#c5 * Math.pow(F, 2);
+			let t6 = this.#c6 * Math.pow(relativeHumidity, 2);
+			let t7 = this.#c7 * Math.pow(F, 2) * relativeHumidity;
+			let t8 = this.#c8 * F * Math.pow(relativeHumidity, 2);
+			let t9 = this.#c9 * Math.pow(F, 2) * Math.pow(relativeHumidity, 2);
+			let result = t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 + t9;
+
+			return this.#convertFtoC(result).toFixed(2);
+		}
+	}
+
+	static #getPastHourlyRelevantInfo(objRow) {
+		let trueTemp = Number.isNaN(Number.parseFloat(objRow["Temp (°C)"])) ? "Non disponible" : Number.parseFloat(objRow["Temp (°C)"]);
+		let humidity = Number.isNaN(Number.parseFloat( objRow["Rel Hum (%)"])) ? "Non disponible" : Number.parseFloat( objRow["Rel Hum (%)"]);
+		let windSpeed = Number.isNaN(Number.parseFloat(objRow["Wind Spd (km/h)"])) ? "Non disponible" : Number.parseFloat(objRow["Wind Spd (km/h)"]);
+		let feltTemp = this.#getFeltTemperature(trueTemp, humidity, windSpeed);
+		
 		return {
 			dateTime: objRow["Date/Time (LST)"],
-			trueTemp: temp,
-			feltTemp: temp + windChill + humidex,
+			trueTemp: trueTemp,
+			feltTemp: feltTemp,
 			weather: (objRow["Weather"] == null) ? "Non disponible" : objRow["Weather"],
-			humidity: Number.isNaN(Number.parseFloat( objRow["Rel Hum (%)"])) ? "Non disponible" : Number.parseFloat( objRow["Rel Hum (%)"]),
+			humidity: humidity,
 			windDirection: Number.isNaN(Number.parseFloat(objRow["Wind Dir (10s deg)"])) ? "Non disponible" : Number.parseFloat(objRow["Wind Dir (10s deg)"]),
-			windSpeed: Number.isNaN(Number.parseFloat(objRow["Wind Spd (km/h)"])) ? "Non disponible" : Number.parseFloat(objRow["Wind Spd (km/h)"]),
+			windSpeed: windSpeed,
 			atmosPressure: Number.isNaN(Number.parseFloat(objRow["Stn Press (kPa)"])) ? "Non disponible" : Number.parseFloat(objRow["Stn Press (kPa)"])
 		};
 	}
@@ -53,13 +107,13 @@ export class StationPastHourlyForecast {
 	static getPastHourlyForecastHeader() {
 		return [
 			"Heure & Date",
-			"Température réelle",
-			"Température ressentie",
+			"Température réelle (°C)",
+			"Température ressentie (°C)",
 			"Météo",
-			"Humidité",
-			"Direction du vent",
-			"Vitesse du vent",
-			"Pression atmosphérique"
+			"Humidité (%)",
+			"Direction du vent (dizaines de °)",
+			"Vitesse du vent (km/h)",
+			"Pression atmosphérique (kPa)"
 		];
 	}
 
