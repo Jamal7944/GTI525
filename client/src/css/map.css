@@ -1,4 +1,19 @@
 #mapContainer {
 	height: 275px;
 	width: 500px;
+	float: left;
+}
+
+#optionContainer {
+	float: right; 
+	text-align: left; 
+	width: 500px;
+}
+
+.leaflet-tooltip.markerLabel {
+	background-color: yellow;
+	border: transparent;
+	box-shadow: none;
+	font-weight: bold;
+	font-size: 14px;
 }
