@@ -3,27 +3,10 @@
 
 <div id="mapContainer"></div>
 <div id="optionContainer">
-	<label>Prévisions pour:</label>
+	<button v-on:click="recenterOnClick()">Recenter</button>
 	<br>
-	<input type="radio" id="rbtn_0jrs" name="previsions" onclick="optionChanged(0);" />
-	<label>Aujourd'hui</label>
+	<button hidden v-on:click="refreshOnClick()">Rafraîchir</button>
 	<br>
-	<input type="radio" id="rbtn_1jrs" name="previsions" onclick="optionChanged(1);" />
-	<label>Demain</label>
-	<br>
-	<input type="radio" id="rbtn_2jrs" name="previsions" onclick="optionChanged(2);" />
-	<label>Après-demain</label>
-	<br>
-	<input type="radio" id="rbtn_3jrs" name="previsions" onclick="optionChanged(3);" />
-	<label>Dans 3 jours</label>
-	<br>
-	<input type="radio" id="rbtn_4jrs" name="previsions" onclick="optionChanged(4);" />
-	<label>Dans 4 jours</label>
-	<br>
-	<input type="radio" id="rbtn_5jrs" name="previsions" onclick="optionChanged(5);" />
-	<label>Dans 5 jours</label>
-	<br>
-	<input type="radio" id="rbtn_6jrs" name="previsions" onclick="optionChanged(6);" />
-	<label>Dans 6 jours</label>
-	<br>
+	<label>Prévisions pour:  </label>
+	<select id="vueJS_cest_de_la_marde" v-on:change="optionChanged()"></select>
 </div>

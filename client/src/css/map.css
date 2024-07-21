@@ -10,10 +10,20 @@
 	width: 500px;
 }
 
-.leaflet-tooltip.markerLabel {
+.leaflet-tooltip.markerLabelDay {
 	background-color: yellow;
 	border: transparent;
 	box-shadow: none;
 	font-weight: bold;
 	font-size: 14px;
+	color: black;
+}
+
+.leaflet-tooltip.markerLabelNight {
+	background-color: black;
+	border: transparent;
+	box-shadow: none;
+	font-weight: bold;
+	font-size: 14px;
+	color: white;
 }
