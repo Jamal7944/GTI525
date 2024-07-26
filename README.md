@@ -28,3 +28,9 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+### Sassurer que le dossiere `data` est accessible en ecriture a chaque 
+
+> sous linux avec `sudo chmod 777 data` en fesant la commande dans le dossiere
