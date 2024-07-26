@@ -12,7 +12,12 @@ services:
         target: /data/db
     networks:
       - node-network
-
+  python-script:
+    build: python-script
+    depends_on:
+      - mongodb
+    networks:
+      - node-network
 networks:
   node-network:
     driver: bridge

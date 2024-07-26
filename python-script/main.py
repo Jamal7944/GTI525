@@ -67,7 +67,7 @@ def saveFile(filename, msg):
 if __name__ == '__main__':
     start = datetime.datetime.now()
     try:
-        myclient = pymongo.MongoClient("mongodb://127.0.0.1:27017/", username='admingr01eq04', password='VFvCLTfeb6qRd6')
+        myclient = pymongo.MongoClient("mongodb://localhost:27017/", username='admingr01eq04', password='VFvCLTfeb6qRd6')
         mydb = myclient["meteo"]
         dblist = myclient.list_database_names()
         if "meteo" in dblist:
