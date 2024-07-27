@@ -1,6 +1,8 @@
 import { Logger } from "../utility/Logger.js";
 import {ObjParser} from "../utility/Parser.js"
 import { Result } from "../utility/Result.js";
+import NodeCache from "node-cache";
+const pastHourlyForecastCache = new NodeCache();
 
 export class StationPastHourlyForecast {
 	// source: https://www.weather.gov/ama/heatindex
@@ -87,6 +89,12 @@ export class StationPastHourlyForecast {
 		let result = Result.failed();
 		let url = `https://climate.weather.gc.ca/climate_data/bulk_data_e.html?format=csv&stationID=${stationID}&Year=${year}&Month=${month}&Day=${day}&timeframe=1&submit=%20Download+Data`;
 		log.info(`Contacting ${url} ...`);
+		let data = pastHourlyForecastCache.get(stationID);
+
+		if(data){
+			log.info("We have a cached CSV item");
+			return data;
+		}
 
 		let response = await fetch(url);
 		if(response.ok) {
@@ -94,6 +102,8 @@ export class StationPastHourlyForecast {
 			log.newline();
 			let text = await response.text();
 			result = Result.success(text);
+			pastHourlyForecastCache.set(stationID, result, 3600);
+			log.info("Cached CSV set");
 		}
 		else {
 			log.error("Unable to retrieve desired data.");

@@ -1,5 +1,7 @@
 import fs from "fs";
 import { DOMParser } from 'xmldom';
+import NodeCache from "node-cache";
+const forecastCache = new NodeCache();
 
 export class StationForecast {
 	/**
@@ -17,6 +19,11 @@ export class StationForecast {
 				url = jsonFile[key].rss_feed;
 				break;
 			}
+		}
+		let data = forecastCache.get(stationID);
+		if(data){
+			console.log("We have a cached XML item");
+			return data;
 		}
 
 		if (url) {
@@ -51,6 +58,8 @@ export class StationForecast {
 						}
 					}
 					resultArr = [itemTitle, href, itemUpdate, Alarm, conditionActuel, forecastDetails];
+					forecastCache.set(stationID, resultArr, 300);
+					console.log("cache set");
 				})
 				.catch(error => console.error('Error fetching the RSS feed:', error));
 		}
