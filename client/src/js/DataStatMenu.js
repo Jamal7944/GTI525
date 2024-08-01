@@ -4,6 +4,7 @@ import { TableUtils } from "./Utils/Table";
 import { DateRangePicker } from "vanillajs-datepicker";
 import PastHourlyForecast from "@/components/PastHourlyForecast.vue";
 import ForecastWeek from '@/components/ForecastWeek.vue';
+import MapForecast from '@/components/MapForecast.vue';
 import "vanillajs-datepicker/css/datepicker-bs5.css";
 
 export default {
@@ -11,7 +12,8 @@ export default {
 
 	components: {
 		PastHourlyForecast,
-		ForecastWeek
+		ForecastWeek,
+		MapForecast
 	},
 
 	data() {

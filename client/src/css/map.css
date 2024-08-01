@@ -1,0 +1,29 @@
+#mapContainer {
+	height: 275px;
+	width: 500px;
+	float: left;
+}
+
+#optionContainer {
+	float: right; 
+	text-align: left; 
+	width: 500px;
+}
+
+.leaflet-tooltip.markerLabelDay {
+	background-color: yellow;
+	border: transparent;
+	box-shadow: none;
+	font-weight: bold;
+	font-size: 14px;
+	color: black;
+}
+
+.leaflet-tooltip.markerLabelNight {
+	background-color: black;
+	border: transparent;
+	box-shadow: none;
+	font-weight: bold;
+	font-size: 14px;
+	color: white;
+}
