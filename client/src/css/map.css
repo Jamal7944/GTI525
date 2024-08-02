@@ -1,13 +1,13 @@
 #mapContainer {
-	height: 275px;
-	width: 500px;
+	height: 270px;
+	width: 700px;
 	float: left;
 }
 
 #optionContainer {
 	float: right; 
 	text-align: left; 
-	width: 500px;
+	width: 300px;
 }
 
 .leaflet-tooltip.markerLabelDay {

@@ -28,7 +28,7 @@ export default {
 			let data = "";
 			if (result.ok) {
 				data = await result.json();
-				//console.log(data);
+				console.log(data);
 			}
 
 			let nameStation = data[0];

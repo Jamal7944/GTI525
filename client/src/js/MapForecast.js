@@ -14,6 +14,7 @@ export default {
 			layer: null,
 			stations: [],
 			forecast: [],
+			displayed: [],
 			defaultLocation: [54.54, -95.14],
 			defaultZoom: 2,
 		}
@@ -32,7 +33,7 @@ export default {
 		optionChanged() {
 			this.map.setView(this.defaultLocation, this.defaultZoom);
 			this.layer.clearLayers();
-			let option = document.getElementById("vueJS_cest_de_la_marde").selectedIndex;
+			let option = document.getElementById("dayOption").selectedIndex;
 
 			for (let i = 0; i < this.stations.length; i++) {
 				let stationID = `s${this.stations[i].id}`;
@@ -84,6 +85,7 @@ export default {
 				if (response.ok) {
 					let json = await response.json();
 					let parserResult = MapDataParser.parse(json);
+					console.log(parserResult);
 					let stationID = `s${this.stations[i].id}`;
 					this.forecast[stationID] = parserResult
 				}
@@ -94,7 +96,9 @@ export default {
 		},
 
 		async loadMap() {
-			this.map = L.map('mapContainer').setView(this.defaultLocation, this.defaultZoom);
+			// fix: https://stackoverflow.com/questions/65981712/uncaught-typeerror-this-map-is-null-vue-js-3-leaflet
+			// Les animations de zoom ont été désactivées car VueJS et Leaflet ne semblent pas bien fonctionner ensemble.
+			this.map = L.map('mapContainer', {zoomAnimation: false}).setView(this.defaultLocation, this.defaultZoom);
 			L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				maxZoom: 19,
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -122,13 +126,12 @@ export default {
 					.addTo(this.layer);
 			}
 
-			let html = "";
 			let defaultStationID = `s${this.stations[0].id}`;
 			let forecasts = await this.forecast;
+
 			for(let i = 0; i < forecasts[defaultStationID].length; i++) {
-				html += `<option value=${i}>${forecasts[defaultStationID][i].displayed}</option>`
+				this.displayed.push(forecasts[defaultStationID][i].displayed);
 			}
-			document.getElementById("vueJS_cest_de_la_marde").innerHTML = html;
 		}
 	}
 }
