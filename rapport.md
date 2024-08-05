@@ -106,8 +106,59 @@ Nous avons séparer les tâches du projet selon la séparation définie dans le 
 ## Carte météo
 <!--R4: Décrivez de quelle manière vous avez implémenté les tâches reliées à la carte des données météo, plus particulièrement T4.3 et T4.4. Quelles problématiques avez-vous rencontré, et comment les avez-vous résolues? (8 points)-->
 #### Implémentation 
+Pour la première tâche, un onglet nommé "Carte" contenant la carte ainsi que les fonctionnalités qui y sont rattachés a été ajouté. Afin d'insérer une carte dans l'onglet, nous avons utilisé la librairie `Leaflet`. Afin de pouvoir visualiser une carte, nous avons mis un conteneur `div` nommé `mapContainer` pour que la librairie Leaflet puisse insérer la carte à notre page web. Pour créer la carte, nous avons fait `L.map("mapContainer")`.
+
+Pour la deuxième tâche, nous avons choisi une liste déroulante (style "combo box") afin d'y placer l'option de choisir le moment pour lequel l'utilisateur veut afficher les prévisions. La méthode statique `MapDataParser.parse(...)` se charge d'interpréter et de séparer l'information retournée par la route `/station/forecast`. Ainsi, nous sommes en mesure de populer une liste de moments pouvant être sélectionnés à partir des prévisions fournies par le serveur.  
+
+Pour la troisième tâche, les villes affichées sur la carte correspondent aux stations météorologiques contenues dans le fichier `station_mapping.json`, situé sur le serveur. ==Afin d'obtenir une liste contenant les informations pertinentes des stations à afficher, nous avons ajouté une route `/station/map-info` sur le serveur **(À FAIRE)**==. Celle-ci retourne un tableau d'objets contenant le nom de la station, un de ses identifiants contenu dans le fichier `station_mapping.json`, la latitude ainsi que la longitude qui se retrouvent tous deux dans le fichier `Station Inventory EN.csv`. Pour ce qui est de la température affichée, cette information provient de la route `/station/forecast`. Comme mentionné pour la deuxième tâche, la méthode `MapDataParser.parse(...)` se charge d'interpréter et de séparer l'information provenant de la route afin de pouvoir l'utiliser sur la carte. Pour les prévisions d'une station donnée, la méthode retourne un tableau d'objets contenant le texte affiché pour la liste déroulante (`displayed`), le jour (`day`), le moment de la journée (`moment`), la température (`temperature`) et les détails (`details`). 
+
+Pour afficher les stations, nous avons utilisé `L.marker([this.stations[i].lat, this.stations[i].lon])` où `.lat` est la latitude et `.lon` est la longitude. Pour y afficher la température, nous ajoutons du texte à la punaise en faisant `.bindTooltip(temperature, { permanent: true, direction: "center", className: className })` sur une punaise. Le paramètre `className` est déterminé par la valeur de la donnée `moment`: si la prévision est de soir ou de nuit, `moment` sera égal à `nuit` et le paramètre sera égal à `markerLabelNight` qui est la classe CSS correspondant à du texte blanc sur fond noir, alors que si la prévision est de jour, `moment` sera égal à `markerLabelDay` qui correspond à du texte noir sur fond jaune. Les classes CSS `markerLabelNight` et `markerLabelDay` sont situées dans le fichier `map.css`.
+
+Pour la quatrième tâche, nous avons affiché les infobulles en faisant `.bindPopup(textePrévision)` sur une punaise où `textePrévision` est le texte représentant la prévision détaillée. Ce texte ce retrouve dans le tableau des prévisions pour les 6 prochains jours et varie selon la journée et la station sélectionnée. 
+
+Finalement, pour la cinquième tâche, on peut utiliser `.setView(position, zoom)` pour centrer la carte sur un point. Dans notre cas, nous avons utilisé `.setView([54.54, -95.14], 2)` pour centrer la carte sur l'ensemble du Canada. Un bouton a été ajouté sur l'interface pour recentrer la carte à volonté.
 
 #### Embûches recontrées et solutions
+
+##### 1. Objet retourné par la route /station/forecast
+
+Nous avons eu des problèmes avec l'objet retourné par la route `/station/forecast` : dans le livrable précédent, il n'était pas important que le format retourné soit consistant étant donné qu'il n'y avait pas d'extraction de données à faire. À titre contextuel, voici le format que pouvait avoir une réponse pour les prévisions: 
+
+```
+[
+	0: "Hamilton - Météo - Environnement Canada", 
+	1: "https://meteo.gc.ca/...",
+	2: "2024-08-01T...",
+	3: "AVERTISSEMENT DE CHALEUR, Hamilton",
+	4: "AVERTISSEMENT DE PLUIE TERMINÉ, Hamilton", 
+		// L'alerte ci-dessus est problématique 
+		// puisque cet index serait normalement 
+		// réservé aux conditions actuelles.
+	5: Array(13) [...] 
+		// Les conditions actuelles se retrouveraient 
+		// dans ce sous-tableau. Remarque, 
+		// pour 6 jours et nuits, nous aurions
+		// 12 éléments, et non 13.
+]
+```
+
+Ainsi, nous avons modifié l'objet retourné par la route des prévisions afin que les alertes soient dans un sous-tableau au cas où il y en aurait plusieurs. De cette façon, les alertes n'interfèrent pas avec les conditions actuelles. Voici le nouveau format: 
+
+```
+[
+	0: "Hamilton - Météo - Environnement Canada", 
+	1: "https://meteo.gc.ca/...",
+	2: "2024-08-01T...",
+	3: Array(2) [
+		0: "AVERTISSEMENT DE CHALEUR, Hamilton",
+		1: "AVERTISSEMENT DE PLUIE TERMINÉ, Hamilton"
+	], 
+	4: "Conditions actuelles: Généralement nuageux, 26 C",
+	5: Array(12) [...] 
+]
+```
+
+##### 2. Décalage des prévisions pour les stations de l'ouest canadien
 
 ## Cache
 <!--R5: Comment procédez-vous pour retirer ou mettre à jour de manière périodique les entrées périmées du cache sur le back-end? (4 points)-->
