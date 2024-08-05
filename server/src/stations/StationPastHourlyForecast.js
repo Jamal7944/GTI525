@@ -1,6 +1,9 @@
 import { Logger } from "../utility/Logger.js";
 import {ObjParser} from "../utility/Parser.js"
 import { Result } from "../utility/Result.js";
+import NodeCache from "node-cache";
+import { connectForecastHourly } from './mongoDBConnection.js';
+const pastHourlyForecastCache = new NodeCache();
 
 export class StationPastHourlyForecast {
 	// source: https://www.weather.gov/ama/heatindex
@@ -87,6 +90,14 @@ export class StationPastHourlyForecast {
 		let result = Result.failed();
 		let url = `https://climate.weather.gc.ca/climate_data/bulk_data_e.html?format=csv&stationID=${stationID}&Year=${year}&Month=${month}&Day=${day}&timeframe=1&submit=%20Download+Data`;
 		log.info(`Contacting ${url} ...`);
+		//let data = pastHourlyForecastCache.get(stationID);
+		const data= await connectForecastHourly();
+		const cachedData = await data.findOne({ _id: stationID });
+
+		if(cachedData){
+			log.info("We have a cached CSV item");
+			return cachedData.value;
+		}
 
 		let response = await fetch(url);
 		if(response.ok) {
@@ -94,6 +105,8 @@ export class StationPastHourlyForecast {
 			log.newline();
 			let text = await response.text();
 			result = Result.success(text);
+			await data.insertOne({ _id: stationID, value: result, createdAt: new Date() });
+			log.info("Cached CSV set");
 		}
 		else {
 			log.error("Unable to retrieve desired data.");

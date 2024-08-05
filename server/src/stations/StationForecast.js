@@ -1,5 +1,8 @@
 import fs from "fs";
 import { DOMParser } from 'xmldom';
+import { connectForecast } from './mongoDBConnection.js';
+//import NodeCache from "node-cache";
+//const forecastCache = new NodeCache();
 
 export class StationForecast {
 	/**
@@ -18,11 +21,19 @@ export class StationForecast {
 				break;
 			}
 		}
+		const data= await connectForecast();
+    	const cachedData = await data.findOne({ _id: stationID });
+		
+
+		if(cachedData){
+			console.log("We have a cached XML item");
+			return cachedData.value;
+		}
 
 		if (url) {
 			await fetch(url)
 				.then(response => response.text())
-				.then(str => {
+				.then(async str => {
 					let parser = new DOMParser();
 					let xmlDoc = parser.parseFromString(str, "application/xml");
 					let itemTitle = xmlDoc.getElementsByTagName("title")[0].textContent;
@@ -34,15 +45,17 @@ export class StationForecast {
 					let itemUpdate = xmlDoc.getElementsByTagName("updated")[0].textContent;
 					let items = xmlDoc.getElementsByTagName("entry");
 					let forecastDetails = [];
-					let Alarm = "";
+					let Alarm = [];
 					let conditionActuel = "";
 
 					for (let i = 0; i < items.length; i++) {
 						let entry = items[i];
-						if (i == 0) {
-							Alarm = entry.getElementsByTagName("title")[0].textContent;
+						
+						if (entry.getElementsByTagName("category")[0].getAttribute("term")=== "Veilles et avertissements") {
+							Alarm.push([entry.getElementsByTagName("title")[0].textContent]);
+							
 						}
-						else if (i == 1) {
+						else if (entry.getElementsByTagName("category")[0].getAttribute("term")=== "Conditions actuelles") {
 							conditionActuel = entry.getElementsByTagName("title")[0].textContent;
 						}
 						else {
@@ -50,7 +63,11 @@ export class StationForecast {
 							entry.getElementsByTagName("summary")[0].textContent]);
 						}
 					}
+					console.log("alarm:"+Alarm);
 					resultArr = [itemTitle, href, itemUpdate, Alarm, conditionActuel, forecastDetails];
+					//forecastCache.set(stationID, resultArr, 300);
+					await data.insertOne({ _id: stationID, value: resultArr, createdAt: new Date() });
+					console.log("cache XML set");
 				})
 				.catch(error => console.error('Error fetching the RSS feed:', error));
 		}
@@ -60,4 +77,6 @@ export class StationForecast {
 
 		return resultArr;
 	}
+
+	
 }

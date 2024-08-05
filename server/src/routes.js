@@ -46,7 +46,7 @@ export default function loadRoutes(app) {
 	
 		if(stationID){
 			let result = await StationForecast.getForecast(stationID);
-			console.log(result);
+			//console.log(result);
 			res.json(result);
 		}
 	});

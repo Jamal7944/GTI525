@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+	integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+<div id="mapContainer"></div>
+<div id="optionContainer">
+	<button v-on:click="recenterOnClick()">Recenter</button>
+	<br>
+	<button hidden v-on:click="refreshOnClick()">Rafraîchir</button>
+	<br>
+	<label>Prévisions pour:  </label>
+	<select id="vueJS_cest_de_la_marde" v-on:change="optionChanged()"></select>
+</div>
