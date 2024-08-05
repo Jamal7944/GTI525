@@ -1,6 +1,8 @@
 services:
+
   mongodb: # script https://www.mongodb.com/resources/products/compatibilities/docker
     image: mongodb/mongodb-community-server:6.0-ubi8
+    restart: unless-stopped
     environment:
       - MONGODB_INITDB_ROOT_USERNAME=admingr01eq04
       - MONGODB_INITDB_ROOT_PASSWORD=VFvCLTfeb6qRd6
@@ -18,6 +20,15 @@ services:
       - mongodb
     networks:
       - node-network
+  client:
+    build: client
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    networks:
+      - node-network
+    depends_on:
+      - mongodb
 networks:
   node-network:
     driver: bridge
