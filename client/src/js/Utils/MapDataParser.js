@@ -4,6 +4,7 @@ export class MapDataParser {
 	static #alertIndex = 3;
 	static #tempIndex = 0;
 	static #detailIndex = 1;
+	static #arrayOfDays = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
 	static #displayedRegex = new RegExp("(Ce|Lundi|Mardi|Mercredi|Jeudi|Vendredi|Samedi|Dimanche)( soir et nuit| soir et cette nuit|)");
 	static #currentTempRegex = new RegExp("[0-9]+(,|)[0-9]+°C");
@@ -22,91 +23,70 @@ export class MapDataParser {
 	static parse(jsObject) {
 		let result = [];
 		let arr = jsObject[this.#forecastArrayIndex];
-		try {
-			// on parse avec un regex le jour et le moment de la journée
-			// ex: "Samedi soir et nuit"
-			let parsedDisplayed = "Actuellement";
 
-			// les premières entrées repréesentent les données actuelles, et
-			// ne contiennent pas le jour, juste la date. 
-			let day = "Actuellement";
+		// on parse avec un regex le jour et le moment de la journée
+		// ex: "Samedi soir et nuit"
+		let parsedDisplayed = "Actuellement";
 
-			// Pour le moment de la journée, on vérifie si le moment présent
-			// est entre 20h et 6h et si vrai, on y attribue le moment "nuit".
-			let now = new Date(Date.now());
-			let moment = (now.getHours() >= 20 || now.getHours() < 6) ? "nuit" : "jour";
+		// les premières entrées repréesentent les données actuelles, et
+		// ne contiennent pas le jour, juste la date. 
+		let day = "Actuellement";
 
-			// on parse la température du string de conditions/prévisions.
-			// ex: "Samedi: Généralement ensoleillé. Maximum 28 sauf 22 là où les vents soufflent du large."
-			// va nous donner "28".
-			let temperature = jsObject[this.#conditionIndex];
-			let parsedTemperature = this.#currentTempRegex.exec(temperature)[0];
+		// Pour le moment de la journée, on vérifie si le moment présent
+		// est entre 20h et 6h et si vrai, on y attribue le moment "nuit".
+		let now = new Date(Date.now());
+		let moment = (now.getHours() >= 20 || now.getHours() < 6) ? "nuit" : "jour";
 
-			// pour les détails de la condition actuelle, on prend l'alerte.
-			let alert = jsObject[this.#alertIndex];
+		// on parse la température du string de conditions/prévisions.
+		// ex: "Samedi: Généralement ensoleillé. Maximum 28 sauf 22 là où les vents soufflent du large."
+		// va nous donner "28".
+		let temperature = jsObject[this.#conditionIndex];
+		let parsedTemperature = this.#currentTempRegex.exec(temperature)[0];
 
-			// on ajoute l'objet 'mapdata' à la collection
-			result.push(this.#makeMapDataObject(parsedDisplayed, day, moment, parsedTemperature, alert));
-
+		// pour les détails de la condition actuelle, on prend l'alerte.
+		let alert = "";
+		for (let i = 0; i < jsObject[this.#alertIndex].length; i++) {
+			alert += jsObject[this.#alertIndex] + '\n';
 		}
-		catch (e) {
-			console.log("Erreur, à revoir... format inconsistant.");
-			//console.log(e);
-		}
+		alert += temperature;
+
+		// on ajoute l'objet 'mapdata' à la collection
+		result.push(this.#makeMapDataObject(parsedDisplayed, day, moment, parsedTemperature, alert));
+		let currentDate = new Date();
+		let dayOfWeek = currentDate.getDay();
 
 		for (let i = 0; i < arr.length; i++) {
 			let selected = arr[i];
-			try {
-				let displayed = selected[this.#tempIndex];
-				let displayedRegexResult = this.#displayedRegex.exec(displayed);
+			let displayed = selected[this.#tempIndex];
+			let displayedRegexResult = this.#displayedRegex.exec(displayed);
 
-				// texte à afficher
-				let parsedDisplayed;
-				parsedDisplayed = displayedRegexResult[0];
+			// texte à afficher
+			let parsedDisplayed;
+			parsedDisplayed = displayedRegexResult[0];
 
-				// jour
-				let day = displayedRegexResult[1];
-
-				// moment
-				let moment = (parsedDisplayed.includes("nuit", 0)) ? "nuit" : "jour";
-
-				// temperature
-				let temperature = this.#forecastRegex.exec(displayed)[0].split(" ")[1] + "°C";
-
-				// details
-				let details = selected[this.#detailIndex];
-
-				result.push(this.#makeMapDataObject(parsedDisplayed, day, moment, temperature, details));
+			// jour
+			let day = displayedRegexResult[1];
+			
+			// correction d'un bug où certaines provinces avait une entrée pour la température actuelle 
+			// ET une entrée pour la prévision plus tard dans la même journée. Cela faisait un décalage 
+			// dans la sélection des prévisions et la carte affichait pour la moitié des stations des 
+			// prévisions de nuit alors que l'autre moitié étaient des prévisions de jour. 
+			if(day == this.#arrayOfDays[dayOfWeek]) {
+				continue;
 			}
-			catch (e) {
-				console.log("bruh");
-				//console.log(e);
 
-				// on parse avec un regex le jour et le moment de la journée
-				// ex: "Samedi soir et nuit"
-				let parsedDisplayed = "Actuellement";
+			// moment
+			let moment = (parsedDisplayed.includes("nuit", 0)) ? "nuit" : "jour";
+			//console.log(parsedDisplayed);
+			//console.log(moment);
 
-				// les premières entrées repréesentent les données actuelles, et
-				// ne contiennent pas le jour, juste la date. 
-				let day = "Actuellement";
+			// temperature
+			let temperature = this.#forecastRegex.exec(displayed)[0].split(" ")[1] + "°C";
 
-				// Pour le moment de la journée, on vérifie si le moment présent
-				// est entre 20h et 6h et si vrai, on y attribue le moment "nuit".
-				let now = new Date(Date.now());
-				let moment = (now.getHours() >= 20 || now.getHours() < 6) ? "nuit" : "jour";
+			// details
+			let details = selected[this.#detailIndex];
 
-				// on parse la température du string de conditions/prévisions.
-				// ex: "Samedi: Généralement ensoleillé. Maximum 28 sauf 22 là où les vents soufflent du large."
-				// va nous donner "28".
-				let temperature = selected[this.#tempIndex];
-				let parsedTemperature = this.#currentTempRegex.exec(temperature)[0];
-
-				// pour les détails de la condition actuelle, on prend l'alerte.
-				let alert = selected[this.#detailIndex];
-
-				// on ajoute l'objet 'mapdata' à la collection
-				result.push(this.#makeMapDataObject(parsedDisplayed, day, moment, parsedTemperature, alert));
-			}
+			result.push(this.#makeMapDataObject(parsedDisplayed, day, moment, temperature, details));
 		}
 		return result;
 	}

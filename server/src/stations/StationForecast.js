@@ -46,15 +46,15 @@ export class StationForecast {
 					let items = xmlDoc.getElementsByTagName("entry");
 					let forecastDetails = [];
 					let Alarm = [];
+					let Alarm = [];
 					let conditionActuel = "";
 
 					for (let i = 0; i < items.length; i++) {
 						let entry = items[i];
-						
-						if (entry.getElementsByTagName("category")[0].getAttribute("term")=== "Veilles et avertissements") {
+						if (entry.getElementsByTagName("category")[0].getAttribute("term") === "Veilles et avertissements") {
 							Alarm.push([entry.getElementsByTagName("title")[0].textContent]);
-							
 						}
+						else if (entry.getElementsByTagName("category")[0].getAttribute("term")=== "Conditions actuelles") {
 						else if (entry.getElementsByTagName("category")[0].getAttribute("term")=== "Conditions actuelles") {
 							conditionActuel = entry.getElementsByTagName("title")[0].textContent;
 						}
@@ -63,6 +63,7 @@ export class StationForecast {
 							entry.getElementsByTagName("summary")[0].textContent]);
 						}
 					}
+					console.log("alarm:"+Alarm);
 					console.log("alarm:"+Alarm);
 					resultArr = [itemTitle, href, itemUpdate, Alarm, conditionActuel, forecastDetails];
 					//forecastCache.set(stationID, resultArr, 300);

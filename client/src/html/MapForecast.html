@@ -8,5 +8,15 @@
 	<button hidden v-on:click="refreshOnClick()">Rafraîchir</button>
 	<br>
 	<label>Prévisions pour:  </label>
-	<select id="vueJS_cest_de_la_marde" v-on:change="optionChanged()"></select>
+	<select id="dayOption" v-on:change="optionChanged()">
+		<option v-for="(text, index) in displayed" :key="index">{{text}}</option>
+	</select>
+	<br>
+	<br>
+	<p style="color: red; font-size: small;">
+		En raison d'un bug hors de notre contrôle, veuillez redimensionner votre 
+		navigateur et le remettre à sa taille d'origine pour pouvoir afficher les 
+		prévisions détaillées ou recentrer la carte.
+		
+	</p>
 </div>
