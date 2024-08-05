@@ -163,7 +163,7 @@ Ainsi, nous avons modifié l'objet retourné par la route des prévisions afin q
 ##### 3. La carte ne se recentre pas 
 Pour des raisons encore inconnues, la carte de Leaflet ne se recentre pas lorsqu'on ouvre l'onglet "carte". De plus, dans cet état, cliquer sur une punaise ne fait que nous recentrer à la position [0, 0]. Nous avons fait des recherches sur internet mais nous n'avons pas trouvé quoique ce soit qui parle de notre problème. 
 
-Nous avons découvert que la carte se comportait normalement si on redimensionnait le navigateur. Nous avions entendu parler que mettre la carte plus grosse pourrait régler le problème, mais cette piste de solution n'a pas régler le problème. 
+Nous avons découvert que la carte se comportait normalement si on redimensionnait le navigateur. Nous avions entendu parler que mettre la carte plus grosse pourrait régler le problème, mais cette piste de solution n'a pas réglé le problème. 
 
 ## Cache
 <!--R5: Comment procédez-vous pour retirer ou mettre à jour de manière périodique les entrées périmées du cache sur le back-end? (4 points)-->
