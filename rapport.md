@@ -159,6 +159,9 @@ Ainsi, nous avons modifié l'objet retourné par la route des prévisions afin q
 ```
 
 ##### 2. Décalage des prévisions pour les stations de l'ouest canadien
+Le Canada étant un vaste pays, les provinces ne sont pas toutes sur le même fuseau horaire. Étant donné que nous sommes situés dans l'est canadien, notre fuseau est différent de celui de l'ouest. Dans les données fournies par Environnement Canada, si la station est en avant-midi, elle aura une prévision additionnelle (13 prévisions) pour la journée d'aujourd'hui. Si la station est en après-midi, alors cette prévision additionnelle n'est pas présente et nous avons 12 prévisions. Cette situation causait un décalage dans les jours sélectionnés où on pouvait avoir pour demain soir et nuit les températures de jours pour les stations de l'ouest et les température de nuit pour les stations à l'est. 
+
+Afin de remédier à ce problème, il a fallu détecter la journée qui était réglée sur l'ordinateur client et avec cette information vérifier si la première entrée des prévisions d'une station correspondait à cette journée. Si oui, cette prévision est simplement ignorée.
 
 ##### 3. La carte ne se recentre pas 
 Pour des raisons encore inconnues, la carte de Leaflet ne se recentre pas lorsqu'on ouvre l'onglet "carte". De plus, dans cet état, cliquer sur une punaise ne fait que nous recentrer à la position [0, 0]. Nous avons fait des recherches sur internet mais nous n'avons pas trouvé quoique ce soit qui parle de notre problème. 
