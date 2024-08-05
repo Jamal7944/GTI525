@@ -75,6 +75,7 @@ R7: Notez qu'une brève introduction et conclusion sont également demandées. (
 
 ## Introduction
 <!-- R7: Notez qu'une brève introduction et conclusion sont également demandées. (4 points) -->
+Dans le livrable précédent, nous avons eu à implémenter un début d'application dorsale ainsi que deux nouvelles fonctionnalitées, soit les prévisions passées et les prévisions pour les prochains jours. Pour ce livrable, nous avons amélioré la partie dorsale de notre application et nous avons ajouté une fonctionnalité. Il a fallu compléter une API RESTful, importer les données météo moyenne dans MongoDB, construire une cache structurée aux requêtes API et finalement ajouter une carte afin de visualiser la température actuelle et les prévisions futures. 
 
 ### Organisation de l'équipe
 <!--R6: De quelques façon avez-vous subdivisé les tâches en équipe pour ce TP? Décrivez le rôle et les tâches assignées à chacum des membres. (4 points) -->
