@@ -171,7 +171,22 @@ Nous avons découvert que la carte se comportait normalement si on redimensionna
 
 ## Cache
 <!--R5: Comment procédez-vous pour retirer ou mettre à jour de manière périodique les entrées périmées du cache sur le back-end? (4 points)-->
-#### Retrait et mise-à-jour des données périmées
+#### Pour la connexion :
+Pour commencer, on se connecte sur la base de données pour aller chercher la collection de cache pour la prévision. Ensuite, on va créer un index à la collection qui expire dans 300 secondes (5minutes) pour la prévision et un autre à 3600 secondes (1 heure) pour les prévisions antérieures.
+#### Pour prévision :
+On retourne sur le fichier .js qui va chercher et traiter le fichier .xml reçu d’Environnement Canada. Avant de faire la requête au site d’Environnement Canada, on va se connecter à la base de données pour vérifier si une collection de cache existe. Si oui on retourne un message à la console et on retourne la valeur obtenue. Si non, la connexion reste ouverte et on fait la demande au serveur pour le fichier .xml pour le traiter. Après d’avoir traité les données, on va insérer les valeurs traitées dans un tableau et on va insérer celui-ci dans la base de données avec le numéro de la station comme identifiant. 
+
+##### Voici un apperçue de la valeur sur MongoDB Compass:
+
+![image](https://github.com/user-attachments/assets/00e05faf-1c57-476a-ad6a-131579bf60a7)
+
+#### Pour les prévisions antérieures :
+On retourne sur le fichier .js qui va chercher et traiter le fichier .csv reçu d’Environnement Canada. Avant de faire la requête au site d’Environnement Canada, on va se connecter à la base de données pour vérifier si un cache existe. Si oui on retourne un message à la console et on retourne la valeur obtenue. Si non, la connexion reste ouverte et on fait la demande au serveur pour le fichier .csv. Ensuite, on va insérer les valeurs du fichier .csv directement dans la base de données avec le numéro de station comme identifiant.
+
+##### Voici un apperçue de la valeur sur MongoDB Compass:
+
+![image](https://github.com/user-attachments/assets/66397619-67d5-4256-b0ea-a33e7a935365)
+
 
 ## Conclusion
 <!-- R7: Notez qu'une brève introduction et conclusion sont également demandées. (4 points) -->
