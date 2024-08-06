@@ -55,7 +55,7 @@ export default function loadRoutes(app) {
 	/**
 	 * 
 	 */
-	app.get("/station/info", async (req, res) => {
+	app.get("/station/map-info", async (req, res) => {
 		let stationIDs = StationMapping.getStationIDs();
 		let result = [];
 

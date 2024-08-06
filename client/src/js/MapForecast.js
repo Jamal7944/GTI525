@@ -72,7 +72,7 @@ export default {
 			}
 			*/
 
-			let response = await fetch("http://localhost:8081/station/info");
+			let response = await fetch("http://localhost:8081/station/map-info");
 			let json = await response.json();
 			this.stations = json;
 			console.log(this.stations);
