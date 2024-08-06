@@ -23,8 +23,25 @@ services:
   client:
     build: client
     restart: unless-stopped
+    container_name: client
     ports:
       - '8080:8080'
+    networks:
+      - node-network
+    depends_on:
+      - mongodb
+  server:
+    build: server
+    volumes:
+      - /server:/usr/src/app
+      - /usr/src/app/node_modules
+    container_name: server
+    restart: unless-stopped
+    ports:
+      - '8081:8081'
+    command: npm start
+    links:
+      - client
     networks:
       - node-network
     depends_on:
