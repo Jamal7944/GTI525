@@ -1,5 +1,5 @@
 import L from "leaflet"
-import { ObjParser } from "./Utils/Parser";
+//import { ObjParser } from "./Utils/Parser";
 import { MapDataParser } from "./Utils/MapDataParser";
 
 //const regexForecast = "(Maximum|Minimum) [0-9]+";
@@ -53,6 +53,7 @@ export default {
 		},
 
 		async loadStations() {
+			/*
 			// validIDs provient de 'station_mapping.json'
 			const validIDs = [2205, 1865, 6633, 6207, 6358, 4932, 4789, 5415, 4337, 5251, 3002, 3328, 6720, 5097, 51357, 118, 3698];
 			const filename = "./Laboratoire_1_-_Enonces-20240516/Lab1_CSV/Station Inventory EN.csv";
@@ -69,8 +70,13 @@ export default {
 					});
 				}
 			}
-		},
+			*/
 
+			let response = await fetch("http://localhost:8081/station/info");
+			let json = await response.json();
+			this.stations = json;
+			console.log(this.stations);
+		},
 
 		async loadForecast() {
 			for (let i = 0; i < this.stations.length; i++) {

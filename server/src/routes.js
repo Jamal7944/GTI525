@@ -1,4 +1,5 @@
 import { StationForecast } from './stations/StationForecast.js';
+import { StationInventory } from './stations/StationInventory.js';
 import { StationMapping } from './stations/StationMapping.js';
 import { StationPastHourlyForecast } from './stations/StationPastHourlyForecast.js';
 
@@ -49,5 +50,34 @@ export default function loadRoutes(app) {
 			//console.log(result);
 			res.json(result);
 		}
+	});
+
+	/**
+	 * 
+	 */
+	app.get("/station/info", async (req, res) => {
+		let stationIDs = StationMapping.getStationIDs();
+		let result = [];
+
+		console.log(stationIDs);
+		for(let i = 0; i < stationIDs.length; i++) {
+			let inventoryEntry = StationInventory.getInfoFromID(stationIDs[i]);
+			//console.log(inventoryEntry);
+
+			if(inventoryEntry == null){
+				console.log(stationIDs[i]);
+				continue;
+			}
+
+			result.push({
+				name: inventoryEntry["Name"],
+				id: stationIDs[i],
+				lat: inventoryEntry["Latitude (Decimal Degrees)"],
+				lon: inventoryEntry["Longitude (Decimal Degrees)"]
+			})
+		}
+
+		console.log(result);
+		res.json(result);
 	});
 }

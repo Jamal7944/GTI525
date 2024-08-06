@@ -1,6 +1,7 @@
 import fs from "fs";
 import { Logger } from "../utility/Logger.js";
 import { Result } from "../utility/Result.js";
+import { StationInventory } from "./StationInventory.js";
 
 /**
  * Classe liant un code d'aéroport à des codes de stationID ainsi qu'à un flux RSS.
@@ -66,5 +67,17 @@ export class StationMapping {
         log.error("id " + id + " not found");
         return Result.failed();
     }
+
+	/**
+	 * 
+	 * @returns Retourne un tableau contenant un id pour chaque station.
+	 */
+	static getStationIDs() {
+		let log = new Logger("StationMapping", "getStationIDs");
+		let arr = [];
+		for(let key in this.#mapping)
+			arr.push(this.#mapping[key]["station_ids"][0]);
+		return arr;
+	}
 }
 

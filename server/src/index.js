@@ -4,6 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import loadRoutes from './routes.js';
 import { StationMapping } from "./stations/StationMapping.js"
+import { StationInventory } from './stations/StationInventory.js';
 
 const app = express();
 const port = 8081;
@@ -20,4 +21,5 @@ loadRoutes(app);
 app.listen(port, () => {
 	console.log(`Serveur en cours d'exécution sur le port ${port}`);
 	StationMapping.load();
+	StationInventory.load();
 });
