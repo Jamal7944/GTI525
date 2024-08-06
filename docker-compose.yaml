@@ -1,7 +1,6 @@
 services:
-
-  mongodb: # script https://www.mongodb.com/resources/products/compatibilities/docker
-    image: mongodb/mongodb-community-server:6.0-ubi8
+  mongodb:
+    image: 'mongodb/mongodb-community-server:6.0-ubi8'
     restart: unless-stopped
     environment:
       - MONGODB_INITDB_ROOT_USERNAME=admingr01eq04

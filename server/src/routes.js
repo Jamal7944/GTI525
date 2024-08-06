@@ -24,13 +24,14 @@ export default function loadRoutes(app) {
 					info = result;
 				}
 			}
-	
+			res.status(201)
 			res.json({
 				info: info,
 				header: StationPastHourlyForecast.getPastHourlyForecastHeader()
 			});
 		}
 		else {
+			res.status(404); // id non trouvé
 			res.json({
 				info: [],
 				header: StationPastHourlyForecast.getPastHourlyForecastHeader(),
@@ -48,6 +49,7 @@ export default function loadRoutes(app) {
 		if(stationID){
 			let result = await StationForecast.getForecast(stationID);
 			//console.log(result);
+			res.status(200)
 			res.json(result);
 		}
 	});
@@ -78,6 +80,7 @@ export default function loadRoutes(app) {
 		}
 
 		console.log(result);
+		res.status(200)
 		res.json(result);
 	});
 }
