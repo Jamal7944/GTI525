@@ -104,15 +104,22 @@ Nous avons séparer les tâches du projet selon la séparation définie dans le 
 
 #### Organisation et rôles des classes et fonctions
 
-Depuis le second laboratoire nous avons instauré une architecture qui permettait de séparer clairement le code applicatif frontal (côté client) du code dorsal (côté serveur). L'architecture est restée similaire puisque nous conservons cette séparation claire entre les deux composants majeurs de notre application. Cependant nous avons ajouté un dossier dédié au chargement des fichiers sources CSV du premier laboratoire ainsi qu'un fichier script dockerfile chargé d'executer le code python. Pour cette troisième itération nous avons en effet mis en place de la conteneurisation avec Docker pour faciliter l'initialisation de la base de données MongoDB ainsi que 
+Depuis le second laboratoire nous avons instauré une architecture qui permettait de séparer clairement le code applicatif frontal (côté client) du code dorsal (côté serveur). L'architecture est restée similaire puisque nous conservons cette séparation claire entre les deux composants majeurs de notre application. 
+
+#TODO# (à compléter par JF)
+	
+	Cependant nous avons ajouté un dossier dédié au chargement des fichiers sources CSV du premier laboratoire ainsi qu'un fichier script dockerfile chargé d'executer le code python. Pour cette troisième itération nous avons en effet mis en place de la conteneurisation avec Docker pour faciliter l'initialisation de la base de données MongoDB ainsi que les deux applications Client et Serveur.
 
 #### Choix de conception et limitations
 
 Décrivez en détail les choix de conception effectués pour votre API REST (pour répondre aux différentes fonctionnalitésdemandées) (total 10 points). Vous devez notamment décrire:Les verbes et noms des différentes ressources (3 points)La structure arborescente (collections) (2 points)Le ou les formats de sortie (1 points)Une justification pour vos choix, et les limites potentielles (4 points)
 
-Nous avons considéré un fichier *routes.js* au niveau du serveur backend chargé de définir toutes les routes d'Express que le client va utiliser. C'est donc ce fichier qui est utilisé par Express à l'initialisation de ce dernier. De cette façon nous avons centralisé les appels API du client vers le serveur.
+Nous avons considéré un fichier *routes.js* au niveau du serveur backend chargé de définir toutes les routes d'Express que le client va utiliser. C'est donc ce fichier qui est utilisé par Express à l'initialisation de ce dernier. De cette façon nous avons centralisé les appels API du client vers le serveur. Nous allons maintenant aborder les différents verbes et noms des ressoruces que nous utilisons ou consommons à travers les appels des APIs externes.
+Pour récupérer les informations météo de la carte des stations on utilise le verbe *get* avec le nom racine `/station/` pour ensuite spécifier la route avec `/map-info`. L'utilisation du *get* est justifiée par le fait que nous voulons simplement récupérer la collection de données utilisées pour charger la carte. La route `/station/past-hourly-forecast` est utilisée pour permettre au client de récupérer les prévisions horaires historiques pour une station donnée. Le *post* est utilisé ici car nous envoyons des informations spécifiques (stationID, année, mois, jour) dans le corps de la requête afin de recevoir les données demandées. La réponse contient les données horaires pour la journée spécifiée ainsi que les en-têtes de données associées. Si l'ID de station fourni n'est pas valide, la réponse renverra une erreur 404 avec un message approprié. La route `/station/forecast` est utilisée pour permettre au client de récupérer les prévisions météorologiques à venir pour une station donnée. Le *post* est employé ici car les prévisions sont demandées en fonction de l'ID de station fourni dans le corps de la requête. La réponse inclut les prévisions pour la station spécifiée ainsi qu'un lien vers la ressource elle-même pour référence. Si l'ID de station est manquant ou invalide, la réponse renverra une erreur 400 avec un message de demande incorrecte.
 
-Pour récupérer les informations météo de la carte d'
+Comme nous le verrons un peu plus tard, nous avons rencontré certains problème sur le format des ressources renvoyées par les APIs externes. Une des limites de notre conception dans l'API REST est justement la gestion de l'over-fetching ou de l'under-fetching. En effet, selon les conditions météos actuellement disponnibles, la quantitité de ressources consommées ou le formats des objets retournés, cela peut nous demander à revoir notre traitement des données et donc faillir à la scalabilité de l'application. 
+
+
 
 ## Carte météo
 <!--R4: Décrivez de quelle manière vous avez implémenté les tâches reliées à la carte des données météo, plus particulièrement T4.3 et T4.4. Quelles problématiques avez-vous rencontré, et comment les avez-vous résolues? (8 points)-->
