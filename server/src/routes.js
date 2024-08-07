@@ -4,17 +4,15 @@ import { StationMapping } from './stations/StationMapping.js';
 import { StationPastHourlyForecast } from './stations/StationPastHourlyForecast.js';
 
 export default function loadRoutes(app) {
+
 	/**
- 	* Route pour obtenir les données horaires d'une journée passée.
- 	*/
+	 * Route pour obtenir les données horaires d'une journée passée.
+	 */
 	app.post("/station/past-hourly-forecast", async (req, res) => {
-		// on s'attend à recevoir: 
-		// { stationID: ..., year: ..., month: ..., day: ... };
-	
 		let request = req.body;
 		let stationID = Number.parseInt(request.stationID);
 		let stationMapping = StationMapping.getFromID(stationID);
-	
+
 		if (stationMapping.success) {
 			let station_ids = stationMapping.result.station_ids;
 			let info = [];
@@ -24,18 +22,16 @@ export default function loadRoutes(app) {
 					info = result;
 				}
 			}
-			res.status(201)
-			res.json({
+			res.status(200).json({
 				info: info,
 				header: StationPastHourlyForecast.getPastHourlyForecastHeader()
 			});
-		}
-		else {
-			res.status(404); // id non trouvé
-			res.json({
+		} else {
+			res.status(404).json({
 				info: [],
 				header: StationPastHourlyForecast.getPastHourlyForecastHeader(),
-			})
+				message: "Station ID not found"
+			});
 		}
 	});
 
@@ -45,29 +41,33 @@ export default function loadRoutes(app) {
 	app.post("/station/forecast", async (req, res) => {
 		let request = req.body;
 		let stationID = Number.parseInt(request.stationID);
-	
-		if(stationID){
+
+		if (stationID) {
 			let result = await StationForecast.getForecast(stationID);
-			//console.log(result);
-			res.status(200)
-			res.json(result);
+			res.status(200).json({
+				forecast: result,
+				links: {
+					self: `/station/forecast?stationID=${stationID}`
+				}
+			});
+		} else {
+			res.status(400).json({
+				message: "Bad request: Missing stationID"
+			});
 		}
 	});
 
 	/**
-	 * 
+	 * Route pour obtenir les informations de la carte des stations.
 	 */
 	app.get("/station/map-info", async (req, res) => {
 		let stationIDs = StationMapping.getStationIDs();
 		let result = [];
 
-		console.log(stationIDs);
-		for(let i = 0; i < stationIDs.length; i++) {
+		for (let i = 0; i < stationIDs.length; i++) {
 			let inventoryEntry = StationInventory.getInfoFromID(stationIDs[i]);
-			//console.log(inventoryEntry);
 
-			if(inventoryEntry == null){
-				console.log(stationIDs[i]);
+			if (inventoryEntry == null) {
 				continue;
 			}
 
@@ -76,11 +76,14 @@ export default function loadRoutes(app) {
 				id: stationIDs[i],
 				lat: inventoryEntry["Latitude (Decimal Degrees)"],
 				lon: inventoryEntry["Longitude (Decimal Degrees)"]
-			})
+			});
 		}
 
-		console.log(result);
-		res.status(200)
-		res.json(result);
+		res.status(200).json({
+			stations: result,
+			links: {
+				self: "/station/map-info"
+			}
+		});
 	});
 }

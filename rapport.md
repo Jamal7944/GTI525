@@ -100,9 +100,19 @@ Nous avons séparer les tâches du projet selon la séparation définie dans le 
 <!--R3: Décrivez les modifications apportées à l'architecture logicielle de votre back-end et de votre front-end par rapport au livrable précédent (total 10 points)-->
 #### Diagramme de classe et patrons de conception
 
+
+
 #### Organisation et rôles des classes et fonctions
 
+Depuis le second laboratoire nous avons instauré une architecture qui permettait de séparer clairement le code applicatif frontal (côté client) du code dorsal (côté serveur). L'architecture est restée similaire puisque nous conservons cette séparation claire entre les deux composants majeurs de notre application. Cependant nous avons ajouté un dossier dédié au chargement des fichiers sources CSV du premier laboratoire ainsi qu'un fichier script dockerfile chargé d'executer le code python. Pour cette troisième itération nous avons en effet mis en place de la conteneurisation avec Docker pour faciliter l'initialisation de la base de données MongoDB ainsi que 
+
 #### Choix de conception et limitations
+
+Décrivez en détail les choix de conception effectués pour votre API REST (pour répondre aux différentes fonctionnalitésdemandées) (total 10 points). Vous devez notamment décrire:Les verbes et noms des différentes ressources (3 points)La structure arborescente (collections) (2 points)Le ou les formats de sortie (1 points)Une justification pour vos choix, et les limites potentielles (4 points)
+
+Nous avons considéré un fichier *routes.js* au niveau du serveur backend chargé de définir toutes les routes d'Express que le client va utiliser. C'est donc ce fichier qui est utilisé par Express à l'initialisation de ce dernier. De cette façon nous avons centralisé les appels API du client vers le serveur.
+
+Pour récupérer les informations météo de la carte d'
 
 ## Carte météo
 <!--R4: Décrivez de quelle manière vous avez implémenté les tâches reliées à la carte des données météo, plus particulièrement T4.3 et T4.4. Quelles problématiques avez-vous rencontré, et comment les avez-vous résolues? (8 points)-->
