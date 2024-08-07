@@ -102,10 +102,10 @@ Nous avons séparer les tâches du projet selon la séparation définie dans le 
 
 ## Classes de l'application frontale
 
-![ClassDiagramClient](ClientDiagram.png)
+![ClassDiagramClient](/ClientDiagram.png)
 
 ## Classes de l'application dorsale
-![ClassDiagramServer](Server.png)
+![ClassDiagramServer](/Server.png)
 
 ## Patron Singleton de conception	
 Que ce soit au niveau du client ou du server, on peut observer que plusieurs classes utilisent implicitement le patron Singleton par l'usage de méthodes statiques. Le patron Singleton garantit qu'une classe a une seule instance tout en fournissant un accès global à cette instance. 
