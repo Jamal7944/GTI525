@@ -100,6 +100,14 @@ Nous avons séparer les tâches du projet selon la séparation définie dans le 
 <!--R3: Décrivez les modifications apportées à l'architecture logicielle de votre back-end et de votre front-end par rapport au livrable précédent (total 10 points)-->
 #### Diagramme de classe et patrons de conception
 
+## Classes de l'application frontale
+
+## Classes de l'application dorsale
+
+## Patron Singleton de conception	
+Que ce soit au niveau du client ou du server, on peut observer que plusieurs classes utilisent implicitement le patron Singleton par l'usage de méthodes statiques. Le patron Singleton garantit qu'une classe a une seule instance tout en fournissant un accès global à cette instance. 
+Les classes DateUtils, Assert, MapDataParser, ParagraphUtils, ObjParser, et TableUtils utilisent des méthodes statiques pour offrir des fonctionnalités globales auxquelles nous pouvons accéder en tout lieu dans le projet. Etant donné qu'on ne créer pas d'instance de ces classes, elles fonctionnent ainsi comme un singleton.
+
 
 
 #### Organisation et rôles des classes et fonctions
@@ -116,6 +124,8 @@ Décrivez en détail les choix de conception effectués pour votre API REST (pou
 
 Nous avons considéré un fichier *routes.js* au niveau du serveur backend chargé de définir toutes les routes d'Express que le client va utiliser. C'est donc ce fichier qui est utilisé par Express à l'initialisation de ce dernier. De cette façon nous avons centralisé les appels API du client vers le serveur. Nous allons maintenant aborder les différents verbes et noms des ressoruces que nous utilisons ou consommons à travers les appels des APIs externes.
 Pour récupérer les informations météo de la carte des stations on utilise le verbe *get* avec le nom racine `/station/` pour ensuite spécifier la route avec `/map-info`. L'utilisation du *get* est justifiée par le fait que nous voulons simplement récupérer la collection de données utilisées pour charger la carte. La route `/station/past-hourly-forecast` est utilisée pour permettre au client de récupérer les prévisions horaires historiques pour une station donnée. Le *post* est utilisé ici car nous envoyons des informations spécifiques (stationID, année, mois, jour) dans le corps de la requête afin de recevoir les données demandées. La réponse contient les données horaires pour la journée spécifiée ainsi que les en-têtes de données associées. Si l'ID de station fourni n'est pas valide, la réponse renverra une erreur 404 avec un message approprié. La route `/station/forecast` est utilisée pour permettre au client de récupérer les prévisions météorologiques à venir pour une station donnée. Le *post* est employé ici car les prévisions sont demandées en fonction de l'ID de station fourni dans le corps de la requête. La réponse inclut les prévisions pour la station spécifiée ainsi qu'un lien vers la ressource elle-même pour référence. Si l'ID de station est manquant ou invalide, la réponse renverra une erreur 400 avec un message de demande incorrecte.
+
+Nous avons décider de toujours formater les ressources obtenues via les APIs externes sous le format JSON afin de standardiser le traitement des objets passés du serveur au client. 
 
 Comme nous le verrons un peu plus tard, nous avons rencontré certains problème sur le format des ressources renvoyées par les APIs externes. Une des limites de notre conception dans l'API REST est justement la gestion de l'over-fetching ou de l'under-fetching. En effet, selon les conditions météos actuellement disponnibles, la quantitité de ressources consommées ou le formats des objets retournés, cela peut nous demander à revoir notre traitement des données et donc faillir à la scalabilité de l'application. 
 
