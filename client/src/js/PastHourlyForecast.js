@@ -34,9 +34,9 @@ export default {
 			document.getElementById("PHF-result").innerHTML = TableUtils.generateNotAvailable();
 		},
 
-		search() {
+		searchButton_onClick() {
 			document.getElementById("PHF-result").innerHTML = '<div class="spinner-border" style="margin-bottom:2rem" role="status"><span class="sr-only"></span></div>'
-			let stnID = Station.getID();
+			let stnID = Number.parseInt(document.getElementById("PHF-id").textContent);
 			let y = Number.parseInt(document.getElementById("PHF-year").value);
 			let m = Number.parseInt(document.getElementById("PHF-month").selectedIndex + 1);
 			let d = Number.parseInt(document.getElementById("PHF-day").value);
@@ -63,7 +63,7 @@ export default {
 				mode: "cors",
 				body: JSON.stringify(body)
 			};
-
+			console.log('holle')
 			fetch("http://localhost:8081/station/past-hourly-forecast", info).then(async (response) => {
 				if (response.ok) {
 					let text = await response.text();
