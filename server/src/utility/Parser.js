@@ -4,7 +4,7 @@ import { Result } from "./Result.js"
 export class ObjParser {
 	/**
 	 * Parse un fichier .csv
-	 * @param {string} filename Nom du fichier .csv
+	 * @param {string} data string d'un fichier .csv
 	 * @returns un tableau contenant toutes les rangées parsées. 
 	 */
 	static parse(data) {

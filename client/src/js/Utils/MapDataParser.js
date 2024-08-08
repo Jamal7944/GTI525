@@ -8,7 +8,7 @@ export class MapDataParser {
 
 	static #displayedRegex = new RegExp("(Ce|Lundi|Mardi|Mercredi|Jeudi|Vendredi|Samedi|Dimanche)( soir et nuit| soir et cette nuit|)");
 	static #currentTempRegex = new RegExp("[0-9]+(,|)[0-9]+°C");
-	static #forecastRegex = new RegExp("(Maximum|Minimum) [0-9]+");
+	static #forecastRegex = new RegExp("(Maximum|Minimum|Températures stables près de) [0-9]+");
 
 	static #makeMapDataObject(displayed, day, moment, temperature, details) {
 		return {
@@ -80,8 +80,16 @@ export class MapDataParser {
 			//console.log(parsedDisplayed);
 			//console.log(moment);
 
+			let temperature = "";
+			try {
 			// temperature
-			let temperature = this.#forecastRegex.exec(displayed)[0].split(" ")[1] + "°C";
+				temperature = this.#forecastRegex.exec(displayed)[0].split(" ")[1] + "°C";
+			}
+			catch(e) {
+				console.log(displayed);
+				console.log(arr[i]);
+			}
+
 
 			// details
 			let details = selected[this.#detailIndex];

@@ -75,7 +75,7 @@ R7: Notez qu'une brève introduction et conclusion sont également demandées. (
 
 ## Introduction
 <!-- R7: Notez qu'une brève introduction et conclusion sont également demandées. (4 points) -->
-Dans le livrable précédent, nous avons eu à implémenter un début d'application dorsale ainsi que deux nouvelles fonctionnalitées, soit les prévisions passées et les prévisions pour les prochains jours. Pour ce livrable, nous avons amélioré la partie dorsale de notre application et nous avons ajouté une fonctionnalité. Il a fallu compléter une API RESTful, importer les données météo moyenne dans MongoDB, construire une cache structurée aux requêtes API et finalement ajouter une carte afin de visualiser la température actuelle et les prévisions futures. 
+Dans le livrable précédent, nous avons eu à implémenter un début d'application dorsale ainsi que deux nouvelles fonctionnalitées, soit les prévisions passées et les prévisions pour les prochains jours. Pour ce livrable, nous avons amélioré la partie dorsale de notre application et nous avons ajouté une fonctionnalité. Il a fallu compléter notre implémentation de l'application dorsale afin de créer une API RESTful, importer les données météo moyennes dans MongoDB, construire une cache structurée aux requêtes API et finalement ajouter une carte afin de visualiser la température actuelle et les prévisions futures. Nous allon srevenir sur les différentes tâches effectuées en abordant le travail réalisé, les difficultés rencontrées et les solutions mises en place. 
 
 ### Organisation de l'équipe
 <!--R6: De quelques façon avez-vous subdivisé les tâches en équipe pour ce TP? Décrivez le rôle et les tâches assignées à chacum des membres. (4 points) -->
@@ -100,9 +100,39 @@ Nous avons séparer les tâches du projet selon la séparation définie dans le 
 <!--R3: Décrivez les modifications apportées à l'architecture logicielle de votre back-end et de votre front-end par rapport au livrable précédent (total 10 points)-->
 #### Diagramme de classe et patrons de conception
 
+## Classes de l'application frontale
+
+![ClassDiagramClient](ClientDiagram.png)
+
+## Classes de l'application dorsale
+![ClassDiagramServer](Server.png)
+
+## Patron Singleton de conception	
+Que ce soit au niveau du client ou du server, on peut observer que plusieurs classes utilisent implicitement le patron Singleton par l'usage de méthodes statiques. Le patron Singleton garantit qu'une classe a une seule instance tout en fournissant un accès global à cette instance. 
+Les classes DateUtils, Assert, MapDataParser, ParagraphUtils, ObjParser, et TableUtils utilisent des méthodes statiques pour offrir des fonctionnalités globales auxquelles nous pouvons accéder en tout lieu dans le projet. Etant donné qu'on ne créer pas d'instance de ces classes, elles fonctionnent ainsi comme un singleton.
+
+
+
 #### Organisation et rôles des classes et fonctions
 
+Depuis le second laboratoire nous avons instauré une architecture qui permettait de séparer clairement le code applicatif frontal (côté client) du code dorsal (côté serveur). L'architecture est restée similaire puisque nous conservons cette séparation claire entre les deux composants majeurs de notre application. 
+
+#TODO# (à compléter par JF)
+	
+	Cependant nous avons ajouté un dossier dédié au chargement des fichiers sources CSV du premier laboratoire ainsi qu'un fichier script dockerfile chargé d'executer le code python. Pour cette troisième itération nous avons en effet mis en place de la conteneurisation avec Docker pour faciliter l'initialisation de la base de données MongoDB ainsi que les deux applications Client et Serveur.
+
 #### Choix de conception et limitations
+
+Décrivez en détail les choix de conception effectués pour votre API REST (pour répondre aux différentes fonctionnalitésdemandées) (total 10 points). Vous devez notamment décrire:Les verbes et noms des différentes ressources (3 points)La structure arborescente (collections) (2 points)Le ou les formats de sortie (1 points)Une justification pour vos choix, et les limites potentielles (4 points)
+
+Nous avons considéré un fichier *routes.js* au niveau du serveur backend chargé de définir toutes les routes d'Express que le client va utiliser. C'est donc ce fichier qui est utilisé par Express à l'initialisation de ce dernier. De cette façon nous avons centralisé les appels API du client vers le serveur. Nous allons maintenant aborder les différents verbes et noms des ressoruces que nous utilisons ou consommons à travers les appels des APIs externes.
+Pour récupérer les informations météo de la carte des stations on utilise le verbe *get* avec le nom racine `/station/` pour ensuite spécifier la route avec `/map-info`. L'utilisation du *get* est justifiée par le fait que nous voulons simplement récupérer la collection de données utilisées pour charger la carte. La route `/station/past-hourly-forecast` est utilisée pour permettre au client de récupérer les prévisions horaires historiques pour une station donnée. Le *post* est utilisé ici car nous envoyons des informations spécifiques (stationID, année, mois, jour) dans le corps de la requête afin de recevoir les données demandées. La réponse contient les données horaires pour la journée spécifiée ainsi que les en-têtes de données associées. Si l'ID de station fourni n'est pas valide, la réponse renverra une erreur 404 avec un message approprié. La route `/station/forecast` est utilisée pour permettre au client de récupérer les prévisions météorologiques à venir pour une station donnée. Le *post* est employé ici car les prévisions sont demandées en fonction de l'ID de station fourni dans le corps de la requête. La réponse inclut les prévisions pour la station spécifiée ainsi qu'un lien vers la ressource elle-même pour référence. Si l'ID de station est manquant ou invalide, la réponse renverra une erreur 400 avec un message de demande incorrecte.
+
+Nous avons décider de toujours formater les ressources obtenues via les APIs externes sous le format JSON afin de standardiser le traitement des objets passés du serveur au client. 
+
+Comme nous le verrons un peu plus tard, nous avons rencontré certains problème sur le format des ressources renvoyées par les APIs externes. Une des limites de notre conception dans l'API REST est justement la gestion de l'over-fetching ou de l'under-fetching. En effet, selon les conditions météos actuellement disponnibles, la quantitité de ressources consommées ou le formats des objets retournés, cela peut nous demander à revoir notre traitement des données et donc faillir à la scalabilité de l'application. 
+
+
 
 ## Carte météo
 <!--R4: Décrivez de quelle manière vous avez implémenté les tâches reliées à la carte des données météo, plus particulièrement T4.3 et T4.4. Quelles problématiques avez-vous rencontré, et comment les avez-vous résolues? (8 points)-->
@@ -111,7 +141,7 @@ Pour la première tâche, un onglet nommé "Carte" contenant la carte ainsi que 
 
 Pour la deuxième tâche, nous avons choisi une liste déroulante (style "combo box") afin d'y placer l'option de choisir le moment pour lequel l'utilisateur veut afficher les prévisions. La méthode statique `MapDataParser.parse(...)` se charge d'interpréter et de séparer l'information retournée par la route `/station/forecast`. Ainsi, nous sommes en mesure de populer une liste de moments pouvant être sélectionnés à partir des prévisions fournies par le serveur.  
 
-Pour la troisième tâche, les villes affichées sur la carte correspondent aux stations météorologiques contenues dans le fichier `station_mapping.json`, situé sur le serveur. ==Afin d'obtenir une liste contenant les informations pertinentes des stations à afficher, nous avons ajouté une route `/station/map-info` sur le serveur **(À FAIRE)**==. Celle-ci retourne un tableau d'objets contenant le nom de la station, un de ses identifiants contenu dans le fichier `station_mapping.json`, la latitude ainsi que la longitude qui se retrouvent tous deux dans le fichier `Station Inventory EN.csv`. Pour ce qui est de la température affichée, cette information provient de la route `/station/forecast`. Comme mentionné pour la deuxième tâche, la méthode `MapDataParser.parse(...)` se charge d'interpréter et de séparer l'information provenant de la route afin de pouvoir l'utiliser sur la carte. Pour les prévisions d'une station donnée, la méthode retourne un tableau d'objets contenant le texte affiché pour la liste déroulante (`displayed`), le jour (`day`), le moment de la journée (`moment`), la température (`temperature`) et les détails (`details`). 
+Pour la troisième tâche, les villes affichées sur la carte correspondent aux stations météorologiques contenues dans le fichier `station_mapping.json`, situé sur le serveur. Afin d'obtenir une liste contenant les informations pertinentes des stations à afficher, nous avons ajouté une route `/station/map-info` sur le serveur. Celle-ci retourne un tableau d'objets contenant le nom de la station, un de ses identifiants contenu dans le fichier `station_mapping.json`, la latitude ainsi que la longitude qui se retrouvent tous deux dans le fichier `Station Inventory EN.csv`. Pour ce qui est de la température affichée, cette information provient de la route `/station/forecast`. Comme mentionné pour la deuxième tâche, la méthode `MapDataParser.parse(...)` se charge d'interpréter et de séparer l'information provenant de la route afin de pouvoir l'utiliser sur la carte. Pour les prévisions d'une station donnée, la méthode retourne un tableau d'objets contenant le texte affiché pour la liste déroulante (`displayed`), le jour (`day`), le moment de la journée (`moment`), la température (`temperature`) et les détails (`details`). 
 
 Pour afficher les stations, nous avons utilisé `L.marker([this.stations[i].lat, this.stations[i].lon])` où `.lat` est la latitude et `.lon` est la longitude. Pour y afficher la température, nous ajoutons du texte à la punaise en faisant `.bindTooltip(temperature, { permanent: true, direction: "center", className: className })` sur une punaise. Le paramètre `className` est déterminé par la valeur de la donnée `moment`: si la prévision est de soir ou de nuit, `moment` sera égal à `nuit` et le paramètre sera égal à `markerLabelNight` qui est la classe CSS correspondant à du texte blanc sur fond noir, alors que si la prévision est de jour, `moment` sera égal à `markerLabelDay` qui correspond à du texte noir sur fond jaune. Les classes CSS `markerLabelNight` et `markerLabelDay` sont situées dans le fichier `map.css`.
 
@@ -171,7 +201,22 @@ Nous avons découvert que la carte se comportait normalement si on redimensionna
 
 ## Cache
 <!--R5: Comment procédez-vous pour retirer ou mettre à jour de manière périodique les entrées périmées du cache sur le back-end? (4 points)-->
-#### Retrait et mise-à-jour des données périmées
+#### Pour la connexion :
+Pour commencer, on se connecte sur la base de données pour aller chercher la collection de cache pour la prévision. Ensuite, on va créer un index à la collection qui expire dans 300 secondes (5minutes) pour la prévision et un autre à 3600 secondes (1 heure) pour les prévisions antérieures.
+#### Pour prévision :
+On retourne sur le fichier .js qui va chercher et traiter le fichier .xml reçu d’Environnement Canada. Avant de faire la requête au site d’Environnement Canada, on va se connecter à la base de données pour vérifier si une collection de cache existe. Si oui on retourne un message à la console et on retourne la valeur obtenue. Si non, la connexion reste ouverte et on fait la demande au serveur pour le fichier .xml pour le traiter. Après d’avoir traité les données, on va insérer les valeurs traitées dans un tableau et on va insérer celui-ci dans la base de données avec le numéro de la station comme identifiant. 
+
+##### Voici un apperçue de la valeur sur MongoDB Compass:
+
+![image](https://github.com/user-attachments/assets/00e05faf-1c57-476a-ad6a-131579bf60a7)
+
+#### Pour les prévisions antérieures :
+On retourne sur le fichier .js qui va chercher et traiter le fichier .csv reçu d’Environnement Canada. Avant de faire la requête au site d’Environnement Canada, on va se connecter à la base de données pour vérifier si un cache existe. Si oui on retourne un message à la console et on retourne la valeur obtenue. Si non, la connexion reste ouverte et on fait la demande au serveur pour le fichier .csv. Ensuite, on va insérer les valeurs du fichier .csv directement dans la base de données avec le numéro de station comme identifiant.
+
+##### Voici un apperçue de la valeur sur MongoDB Compass:
+
+![image](https://github.com/user-attachments/assets/66397619-67d5-4256-b0ea-a33e7a935365)
+
 
 ## Conclusion
 <!-- R7: Notez qu'une brève introduction et conclusion sont également demandées. (4 points) -->
