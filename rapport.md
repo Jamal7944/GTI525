@@ -113,10 +113,10 @@ les informations entre les stations et l'historique peuvent etre rejoint avec la
 
 ## Classes de l'application frontale
 
-![ClassDiagramClient](ClientDiagram.png)
+![ClassDiagramClient](/ClientDiagram.png)
 
 ## Classes de l'application dorsale
-![ClassDiagramServer](Server.png)
+![ClassDiagramServer](/Server.png)
 
 ## Patron Singleton de conception	
 Que ce soit au niveau du client ou du server, on peut observer que plusieurs classes utilisent implicitement le patron Singleton par l'usage de méthodes statiques. Le patron Singleton garantit qu'une classe a une seule instance tout en fournissant un accès global à cette instance. 
@@ -131,8 +131,6 @@ Depuis le second laboratoire nous avons instauré une architecture qui permettai
 Cependant nous avons ajouté un dossier dédié au chargement des fichiers sources CSV du premier laboratoire ainsi qu'un fichier script dockerfile chargé d'executer le code python. Pour cette troisième itération nous avons en effet mis en place de la conteneurisation avec Docker pour faciliter l'initialisation de la base de données MongoDB ainsi que la population de la base de donnée avec les fichier CSV. Le but de Docker était d'ajouter aussi le client et le serveur pour facilité le deploiement total, mais malheureusement, l'application doit etre déployé manuellement car nous n'avons pas reussi a bien exclure les erreures `CORS` (du au fait que le client et le serveur doivent etre executé dans 2 _containers_ différents).
 
 #### Choix de conception et limitations
-
-Décrivez en détail les choix de conception effectués pour votre API REST (pour répondre aux différentes fonctionnalitésdemandées) (total 10 points). Vous devez notamment décrire:Les verbes et noms des différentes ressources (3 points)La structure arborescente (collections) (2 points)Le ou les formats de sortie (1 points)Une justification pour vos choix, et les limites potentielles (4 points)
 
 Nous avons considéré un fichier *routes.js* au niveau du serveur backend chargé de définir toutes les routes d'Express que le client va utiliser. C'est donc ce fichier qui est utilisé par Express à l'initialisation de ce dernier. De cette façon nous avons centralisé les appels API du client vers le serveur. Nous allons maintenant aborder les différents verbes et noms des ressoruces que nous utilisons ou consommons à travers les appels des APIs externes.
 Pour récupérer les informations météo de la carte des stations on utilise le verbe *get* avec le nom racine `/station/` pour ensuite spécifier la route avec `/map-info`. L'utilisation du *get* est justifiée par le fait que nous voulons simplement récupérer la collection de données utilisées pour charger la carte. La route `/station/past-hourly-forecast` est utilisée pour permettre au client de récupérer les prévisions horaires historiques pour une station donnée. Le *post* est utilisé ici car nous envoyons des informations spécifiques (stationID, année, mois, jour) dans le corps de la requête afin de recevoir les données demandées. La réponse contient les données horaires pour la journée spécifiée ainsi que les en-têtes de données associées. Si l'ID de station fourni n'est pas valide, la réponse renverra une erreur 404 avec un message approprié. La route `/station/forecast` est utilisée pour permettre au client de récupérer les prévisions météorologiques à venir pour une station donnée. Le *post* est employé ici car les prévisions sont demandées en fonction de l'ID de station fourni dans le corps de la requête. La réponse inclut les prévisions pour la station spécifiée ainsi qu'un lien vers la ressource elle-même pour référence. Si l'ID de station est manquant ou invalide, la réponse renverra une erreur 400 avec un message de demande incorrecte.
@@ -229,3 +227,4 @@ On retourne sur le fichier .js qui va chercher et traiter le fichier .csv reçu 
 
 ## Conclusion
 <!-- R7: Notez qu'une brève introduction et conclusion sont également demandées. (4 points) -->
+Au cours de ce livrable, nous avons pu mettre en pratique les différents concepts vu en classe afin d'atteindre les objectifs de ce livrable. Notre API est "RESTful", nous avons importé les données météo dans la base de donnée MongoDB, nous avons une cache structurée pour les requêtes vers les services externes et nous avons ajouté une carte pour visualiser la température actuelle et les prévisions pour les prochains jours et nuits. De plus, nous avons aussi utilisé un docker pour automatiser initialisation du projet ainsi que de la base de donnée. 
