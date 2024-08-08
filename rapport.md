@@ -92,9 +92,20 @@ Nous avons séparer les tâches du projet selon la séparation définie dans le 
 
 ## MongoDB
 <!--Décrivez le schéma et la structure de votre base de données MongoDB (total 10 points)-->
-#### Les collections et la structure des documents
+### Choix de conception et limitations
+Pour la base de donnée, afin de facilité le deployement par le chargé de projet, nous avons decider d'utiliser `docker compose` ainsi que 2 containers. Le premiere provenant directement de la compagnie en charge de MongoDB et qui créer un instance de la base de donnée de type communautaire et accessible à l'adresse `127.0.0.1:27017`. Le second container consiste a un script python qui permet de peuplé la base de donnée si celle-ci est vide (la validation consiste a voir si la collection `meteo` est vide et/ou existe).
 
-#### Choix de conception et limitations
+Ce choix de conception permet une un deploiement facile et une mise à l'echelle horizontale (_horizontal scaling_), elle rend notre base de donnée dépendante de l'environnement Docker. Ainsi, elle empeche aussi de _debugger_ facilement le code du a sont execution ce fesant dans un _container_.
+
+### Les collections et la structure des documents
+Pour les collections, nous avons utilisées 1 collection par objet a sauvegardé soit : 
+- **stations** : les differentes stations
+- **historique** : l'historique de la meteo selon les differentes stations
+- **forecast** : les prévision météo
+- **forecastHourly** : les previsions météo (par heures)
+
+les informations entre les stations et l'historique peuvent etre rejoint avec la ligne `climate_id` ou `station_id` (`_id` dans MongoDB)
+
 
 ## Architecture logicielle
 <!--R3: Décrivez les modifications apportées à l'architecture logicielle de votre back-end et de votre front-end par rapport au livrable précédent (total 10 points)-->
@@ -117,9 +128,7 @@ Les classes DateUtils, Assert, MapDataParser, ParagraphUtils, ObjParser, et Tabl
 
 Depuis le second laboratoire nous avons instauré une architecture qui permettait de séparer clairement le code applicatif frontal (côté client) du code dorsal (côté serveur). L'architecture est restée similaire puisque nous conservons cette séparation claire entre les deux composants majeurs de notre application. 
 
-#TODO# (à compléter par JF)
-	
-	Cependant nous avons ajouté un dossier dédié au chargement des fichiers sources CSV du premier laboratoire ainsi qu'un fichier script dockerfile chargé d'executer le code python. Pour cette troisième itération nous avons en effet mis en place de la conteneurisation avec Docker pour faciliter l'initialisation de la base de données MongoDB ainsi que les deux applications Client et Serveur.
+Cependant nous avons ajouté un dossier dédié au chargement des fichiers sources CSV du premier laboratoire ainsi qu'un fichier script dockerfile chargé d'executer le code python. Pour cette troisième itération nous avons en effet mis en place de la conteneurisation avec Docker pour faciliter l'initialisation de la base de données MongoDB ainsi que la population de la base de donnée avec les fichier CSV. Le but de Docker était d'ajouter aussi le client et le serveur pour facilité le deploiement total, mais malheureusement, l'application doit etre déployé manuellement car nous n'avons pas reussi a bien exclure les erreures `CORS` (du au fait que le client et le serveur doivent etre executé dans 2 _containers_ différents).
 
 #### Choix de conception et limitations
 
